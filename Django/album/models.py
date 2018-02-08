@@ -28,6 +28,6 @@ class Album(models.Model):
         # 호호호빵 (휘성, 김태우)
         artists = ', '.join(self.artists.values_list('name', flat=True))
         return '{title} [{artists}]'.format(
-            title = self.title,
-            artists = artists,
+            title=self.title,
+            artists=artists,
         )
