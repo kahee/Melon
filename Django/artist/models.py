@@ -17,13 +17,14 @@ class Artist(models.Model):
         (BLOOD_TYPE_C, 'AB형'),
         (BLOOD_TYPE_X, '기타'),
     )
+
     # Pillow 이미지 저장하기 위해 사용하는 것
-    img_profile = models.ImageField('프로필 이미지', upload_to='artist', )
+    img_profile = models.ImageField('프로필 이미지', upload_to='artist', blank=True)
     name = models.CharField('이름', max_length=50, )
     real_name = models.CharField('본명', max_length=30, blank=True, )
     nationality = models.CharField('국적', max_length=50, blank=True, )
     birth_date = models.DateField('생년월일', blank=True, null=True, )
-    constellation = models.CharField('별자리', max_length=30, )
+    constellation = models.CharField('별자리', max_length=30, blank=True, )
     blood_type = models.CharField('혈액형', max_length=1, choices=CHOICES_BLOOD_TYPE, blank=True)
     intro = models.TextField('소개', blank=True, )
 

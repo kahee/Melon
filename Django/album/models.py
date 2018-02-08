@@ -5,13 +5,29 @@ from artist.models import Artist
 
 
 class Album(models.Model):
-    album_name = models.CharField('앨범명', max_length=100)
-    # 가수 : 앨범  = 1 : N
-    artist = models.ForeignKey(
-        '가수명',
+    title = models.CharField('앨범명', max_length=100)
+    artists = models.ManyToManyField(
         Artist,
-        on_delete=models.SET_NULL,
+        verbose_name='아티스트 목록'
+    )
+    img_cover = models.ImageField(
+        '커버 이미지',
+        upload_to='album',
+        blank=True,
     )
     release_date = models.DateField('발매일', )
-    genre = models.CharField('장르', max_length=100)
+    # 장르는 가지고 있는 노래들에서 가져오기
+
     album_intro = models.TextField('앨범소개', blank=True)
+
+    @property
+    def genre(self):
+        return ''
+
+    def __str__(self):
+        # 호호호빵 (휘성, 김태우)
+        artists = ', '.join(self.artists.values_list('name', flat=True))
+        return '{title} [{artists}]'.format(
+            title = self.title,
+            artists = artists,
+        )
