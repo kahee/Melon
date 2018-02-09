@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from artist.models import Artist
@@ -42,6 +42,7 @@ def artist_create(request):
             birth_date=datetime.strptime(birth_date, '%Y-%m-%d')
         )
         artist.save()
+        return redirect('artist:artist-list')
 
     elif request.method == 'GET':
         pass
