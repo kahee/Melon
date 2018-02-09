@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">이름</label>
+        <input
+                type="text"
+                name="name"
+                id="name"
+        >
+        <br>
+
+        <label for="real_name">본명</label>
+        <input
+                type="text"
+                name="real_name"
+                id="real_name"
+        >
+        <br>
+
+        <label for="nationality">국적</label>
+        <input
+                type="text"
+                name="nationality"
+                id="nationality"
+        >
+        <br>
+
+        <label for="birth_date">생년월일</label>
+        <input
+                type="text"
+                name="birth_date"
+                id="birth_date"
+        >
+
+        <br>
+
+        <label for="constellation">별자리</label>
+        <input
+                type="text"
+                name="constellation"
+                id="constellation"
+        >
+
+        <br>
+        <label for="blood_type">혈액형</label>
+        <input
+                type="text"
+                name="blood_type"
+                id="blood_type"
+        >
+        <br>
+        
+        <label for="intro">소개</label>
+        <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
+        <br>
+
+        <input type="submit" value="제출">
+
+    </div>
+</form>
+
+{% endblock %}

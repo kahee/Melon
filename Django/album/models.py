@@ -22,7 +22,8 @@ class Album(models.Model):
 
     @property
     def genre(self):
-        return ''
+        # sql distinct사용하는게 속도가 더 빠르다.
+        return ', '.join(self.song_set.values_list('genre', flat=True).distinct())
 
     def __str__(self):
         # 호호호빵 (휘성, 김태우)

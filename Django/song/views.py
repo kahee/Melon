@@ -7,7 +7,10 @@ from song.models import Song
 def song_list(request):
     songs = Song.objects.all()
     context = {
-        'songs':songs
+        'songs': songs
     }
 
-    return render(request,'song/song_list.html',context)
+
+    return render(request, 'song/song_list.html', context)
+
+
