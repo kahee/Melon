@@ -43,6 +43,7 @@ def artist_create(request):
 
     elif request.method == 'GET':
         pass
+
     return render(request, 'artist/artist_create.html', context)
 
 
