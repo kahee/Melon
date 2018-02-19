@@ -39,3 +39,5 @@ class Song(models.Model):
             title=self.title,
             album=self.album.title,
         )
+
+
