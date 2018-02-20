@@ -9,9 +9,7 @@ __all__ = (
 
 
 def artist_create(request):
-    context = {
-
-    }
+    context = {}
 
     if request.method == 'POST':
         name = request.POST['name']

@@ -34,9 +34,7 @@ def artist_search_from_melon(request):
         }
 
         response = requests.get(url, params)
-
         soup = BeautifulSoup(response.text, 'lxml')
-
         artist_info = soup.find_all('div', class_='wrap_atist12')
         artist_info_list = []
         for i in artist_info:

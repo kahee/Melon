@@ -2,7 +2,6 @@ from collections import namedtuple
 from typing import NamedTuple
 
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
