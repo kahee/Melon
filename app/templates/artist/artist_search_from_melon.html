@@ -7,6 +7,15 @@
         <input type="text" name ="keyword" placeholder="아티스트">
         <button type="submit">검색</button>
     </form>
+
+    <ul>
+        {% for artist_info in artist_info_list %}
+        <li>
+            <img src="{{ artist_info.img }}" alt="">
+            <span>{{ artist_info.artist_id }} {{ artist_info.artist }}</span>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 
 {% endblock %}
