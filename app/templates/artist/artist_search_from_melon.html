@@ -4,15 +4,20 @@
 <div>
     <h3><a href="{% url 'artist:artist-search-melon' %}">멜론에서 아티스트 검색</a></h3>
     <form action="" method="get">
-        <input type="text" name ="keyword" placeholder="아티스트">
+        <input type="text" name="keyword" placeholder="아티스트">
         <button type="submit">검색</button>
     </form>
 
     <ul>
         {% for artist_info in artist_info_list %}
         <li>
-            <img src="{{ artist_info.img }}" alt="">
-            <span>{{ artist_info.artist_id }} {{ artist_info.artist }}</span>
+            <form action="{% url 'artist:artist-add-from-melon' %}" method="post">
+                {% csrf_token %}
+                <input type='hidden' name="artist_id" value="{{ artist_info.artist_id}}">
+                <img src="{{ artist_info.img }}" alt="">
+                <span>{{ artist_info.artist_id }}{{ artist_info.artist }}</span>
+                <button type="submit">DB에 추가하기</button>
+            </form>
         </li>
         {% endfor %}
     </ul>

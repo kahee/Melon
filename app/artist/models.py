@@ -27,6 +27,7 @@ class Artist(models.Model):
     constellation = models.CharField('별자리', max_length=30, blank=True, )
     blood_type = models.CharField('혈액형', max_length=1, choices=CHOICES_BLOOD_TYPE, blank=True)
     intro = models.TextField('소개', blank=True, )
+    melon_id = models.CharField('멜론 ArtistID', max_length=20, blank=True,null=True,unique=True, )
 
     def __str__(self):
         return self.name
