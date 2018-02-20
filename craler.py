@@ -1,121 +1,94 @@
-def get_detail(self, artist_id, refresh_html=False):
-    file_path = os.path.join(DATA_DIR, f'artist_detail_{artist_id}.html')
-    try:
-        file_mode = 'wt' if refresh_html else 'xt'
-        with open(file_path, file_mode) as f:
-            # 아티스트 목록 가져오는 html
-            url = 'https://www.melon.com/artist/detail.htm'
-            params = {
-                'artistId': artist_id
-            }
-            response = requests.get(url, params)
-            source = response.text
-            f.write(source)
-    except FileExistsError:
-        print(f'"{file_path}" file is already exists!')
+import re
 
-        source = open(file_path, 'rt').read()
-        soup = BeautifulSoup(source, 'lxml')
+import requests
+from bs4 import BeautifulSoup, NavigableString
 
-        # 기본 정보 _info
-        wrap_dtl_atist = soup.find('div', class_='wrap_dtl_atist')
-        url_img_cover = wrap_dtl_atist.find('span', id="artistImgArea").find('img').get('src')
-        name_div = wrap_dtl_atist.select_one('p.title_atist').text[5:]
-        name = re.search(r'(\w+)\s', name_div).group(1)
-        real_name = re.search(r'\((\w+)\)', name_div).group(1)
 
-        debut = wrap_dtl_atist.select_one('dl.atist_info > dd:nth-of-type(1)').get_text(strip=True)[:10]
-        birthday = wrap_dtl_atist.select_one('dl.atist_info > dd:nth-of-type(2)').get_text(strip=True)
-        artist_type = wrap_dtl_atist.select_one('dl.atist_info > dd:nth-of-type(3)').get_text(strip=True)
-        agency = wrap_dtl_atist.select_one('dl.atist_info > dd:nth-of-type(4)').get_text(strip=True)
-        award = wrap_dtl_atist.select_one('dl.atist_info > dd:nth-of-type(5)').get_text(strip=True)
-        self.artist_id = artist_id
-        self.name = name
-        self.real_name = real_name
+def get_detail(artist_id):
+    url = 'https://www.melon.com/artist/detail.htm'
+    params = {
+        'artistId': artist_id
+    }
+    response = requests.get(url, params)
+    print(response.url)
 
-        result = {'데뷔': debut,
-                  '생일': birthday,
-                  '활동유형': artist_type,
-                  '소속사': agency,
-                  '수상이력': award,
-                  '이미지': url_img_cover
-                  }
+    soup = BeautifulSoup(response.text, 'lxml')
 
-        self._info = result
+    # award_history
+    div_section_atistinfo01 = soup.find('div', class_="section_atistinfo01")
+    if not div_section_atistinfo01 == None:
+        dl = div_section_atistinfo01.find('dl', class_='list_define')
+        award_history = [item.get_text(strip=True) for item in dl.contents if not isinstance(item, str)]
 
-        # _award_history
-        list_define = soup.find('dl', class_="list_define").find_all("dd")
-        for i in list_define:
-            # 수상 (수상내역) 형식으로 변경
-            award_detail = re.search(r'(.*?)\|(.*)', i.text)
-            self._award_history.append(f'{award_detail.group(1)} ({award_detail.group(2)})')
 
-        # _introduction
-        div_artist_intro = soup.find('div', id="d_artist_intro")
+    # _introduction = {}
+    div_section_atistinfo02 = soup.find('div', class_="section_atistinfo02")
+    if not div_section_atistinfo02 == None:
+        div = div_section_atistinfo02.find('div', id='d_artist_intro')
         introduction_list = list()
-        for i in div_artist_intro:
+        for i in div:
             if i.name == 'br':
                 introduction_list.append('\n')
             elif type(i) is NavigableString:
                 introduction_list.append(i.strip())
 
         introduction = ''.join(introduction_list)
-        self._introduction = introduction
+        print(introduction)
 
-        # _activity_information
-        dl_list_define = soup.find('div', class_="section_atistinfo03").find('dl', class_='list_define')
+    # _activity_information = {}
+    div_section_atistinfo03 = soup.find('div', class_="section_atistinfo03")
+    if not div_section_atistinfo03 == None:
+        dl = div_section_atistinfo03.find('dl', class_='list_define')
+        items = [item.get_text(strip=True) for item in dl.contents if not isinstance(item, str)]
+        '''
+        iterable은 멤버를 하나씩 반환 할 수 있는 object 를 의미한다. 
+        '''
+        # 나중에 info 에 여기있는 정보를 넣어주면 될꺼같다
+        it = iter(items)
+        activity_information = dict(zip(it, it))
+        print(activity_information)
 
-        activity_list = list()
-        for index, i in enumerate(dl_list_define.find_all("dd")):
-            activity_list.append(i.get_text(strip=True))
+    # _personal_information
+    div_section_atistinfo04 = soup.find('div', class_="section_atistinfo04")
+    if not div_section_atistinfo04 == None:
+        dl = div_section_atistinfo04.find('dl', class_='list_define')
+        items = [item.get_text(strip=True) for item in dl.contents if not isinstance(item, str)]
+        li = iter(items)
+        personal_information = dict(zip(li, li))
+        print(personal_information)
 
-        activity_information = {
-            "데뷔": activity_list[0],
-            "활동년대": activity_list[1],
-            "유형": activity_list[2],
-            "장르": activity_list[3],
-            "소속사명": activity_list[4],
-            "소속그룹": activity_list[5]
-        }
-        self._activity_information = activity_information
+    # _related_information
+    div_section_atistinfo05 = soup.find('div', class_="section_atistinfo05")
 
-        # _personal_information
-        dl_list_define = soup.find('div', class_="section_atistinfo04").find('dl', class_='list_define')
+    if not div_section_atistinfo05 == None:
+        button_sns = div_section_atistinfo05.find_all('button')
+        address = [re.search(r".*\('(.*?)?'", item.get('onclick')).group(1) for item in button_sns]
+        sns_name = [item.get_text() for item in button_sns]
+        related_information_first = dict(zip(sns_name, address))
+        dl = div_section_atistinfo05.find('dl', class_='list_define')
+        items = [item.get_text(strip=True) for item in dl.contents if not isinstance(item, str)]
+        it = iter(items)
+        # 딕셔너리두개를 한개로 병합  Unpacking Generalizations
+        related_information_second = dict(zip(it, it))
+        related_information = {**related_information_first, **related_information_second}
+        print(related_information)
 
-        personal_list = list()
-        for index, i in enumerate(dl_list_define.find_all("dd")):
-            personal_list.append(i.get_text(strip=True))
+    # 기본 info 이미지, 이름, 본명
+    wrap_dtl_atist = soup.find('div', class_='wrap_dtl_atist')
+    url_img_cover = wrap_dtl_atist.find('span', id="artistImgArea").find('img').get('src')
 
-        personal_information = {
-            "본명": personal_list[0],
-            "별명": personal_list[1],
-            "국적": personal_list[2],
-            "생일": personal_list[3],
-            "별자리": personal_list[4],
-            "혈액형": personal_list[5]
-        }
-        self._personal_information = personal_information
+    # 이미지가 없을 경우에는 url 주소가 없는 것처럼
+    if url_img_cover == "http://cdnimg.melon.co.kr":
+        url_img_cover = ""
+    name_div = wrap_dtl_atist.select_one('p.title_atist').text[5:]
+    name = re.search(r'(\w+)\s', name_div).group(1)
+    real_name = re.search(r'\((\w+)\)', name_div).group(1)
 
-        # _related_information
-        dl_list_define = soup.find('div', class_="section_atistinfo05")
-        # sns
-        buttons = dl_list_define.find_all('button', type="button")
+    print(url_img_cover)
+    print(name)
+    print(real_name)
+    print(artist_id)
 
-        sns_address = list()
-        for i in buttons:
-            address = re.search(r".*\('(.*?)?'", i.get('onclick'))
-            sns_address.append(address.group(1))
 
-        related_information = {
-            "SNS": f'트위터 ({sns_address[0]}), 페이스북 ({sns_address[1]})'
-        }
-
-        # 그외 계정들
-        dd_find = dl_list_define.find('dl', class_="list_define").find_all("dd")
-        other_address = list()
-        for i in dd_find:
-            other_address.append(i.text)
-        related_information["YouTube"] = other_address[0]
-        related_information["팬카페"] = other_address[1]
-
-        self._related_information = related_information
+if __name__ == '__main__':
+    webtoon = get_detail(560205)

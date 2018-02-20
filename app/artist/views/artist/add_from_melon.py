@@ -2,8 +2,10 @@ from datetime import datetime
 import re
 import requests
 from bs4 import BeautifulSoup
+from django.core.files import File
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
+from io import BytesIO
 
 from ...models import Artist
 
@@ -75,6 +77,14 @@ def artist_add_from_melon(request):
         db_constellation = personal_list[4]
         db_blood_type = personal_list[5]
 
+        # # blood_type과 birth_date_str 이 없을 때 처리하기
+        # if db_birth_date:
+        #     db_blood_type = datetime.strptime(db_birth_date, '%Y.%m.%d')
+        #
+        # else:
+        #     db_birth_date = ''
+        #
+        # if not db_blood_type:
         for short, full in Artist.CHOICES_BLOOD_TYPE:
             if db_blood_type.strip() == full:
                 db_blood_type = short
@@ -82,7 +92,14 @@ def artist_add_from_melon(request):
             else:
                 db_blood_type = Artist.BLOOD_TYPE_X
 
-        Artist.objects.update_or_create(
+
+        response = requests.get(url_img_cover)
+        binary_data = response.content
+        temp_file = BytesIO()
+        temp_file.write(binary_data)
+        temp_file.seek(0)
+
+        artist, _ = Artist.objects.update_or_create(
             melon_id=artist_id,
             defaults={
                 'name': db_name,
@@ -93,5 +110,8 @@ def artist_add_from_melon(request):
                 'blood_type': db_blood_type,
             }
         )
+        from pathlib import Path
+        file_name = Path(url_img_cover).name
+        artist.img_profile.save(file_name, File(temp_file))
 
-    return redirect('artist:artist-list')
+        return redirect('artist:artist-list')

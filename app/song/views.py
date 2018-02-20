@@ -107,3 +107,12 @@ def song_serarch(request):
         # GET이면 빈 태로 render실행
 
     return render(request, 'song/song_search.html', context)
+
+
+
+def song_add_from_melon(request):
+    #  패키지 분할(artist랑 똑같은 형태로)
+    # artist_add_from_melon 같은 기능
+    # song_search_fromm_melon 도 구현
+    #  이 안에 DB 에 추가 하는  FROM  구현
+    pass
