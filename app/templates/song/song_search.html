@@ -13,27 +13,10 @@
     </div>
     <input type="submit" value="검색">
 
-    <h2>아티스트 검색</h2>
-    <ul>
-        {% for song in songs_from_artists %}
-        <li>{{ song.title }}</li>
-        {% endfor %}
-    </ul>
+    {% include "include/song_search_result.html" with type='아티스트' songs=song_from_artists only%}
+    {% include "include/song_search_result.html" with type='앨범' songs=song_from_albums only %}
+    {% include "include/song_search_result.html" with type='노래제목' songs=song_from_title only %}
 
-    <h2>앨범 검색</h2>
-    <ul>
-        {% for song in songs_from_albums %}
-        <li>{{ song.title }}</li>
-        {% endfor %}
-    </ul>
-
-
-    <h2>곡명 검색</h2>
-    <ul>
-        {% for song in songs_from_title %}
-        <li>{{ song.title }}</li>
-        {% endfor %}
-    </ul>
 
 </form>
 {% endblock %}
