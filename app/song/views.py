@@ -1,3 +1,6 @@
+from collections import namedtuple
+from typing import NamedTuple
+
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -37,7 +40,7 @@ def song_serarch(request):
     :param request:
     :return:
     """
-    context = {}
+
     # Song과 연결된 Artist의 name에 keyword가 포함된 경우
     # Song과 연결된 Album의 title에 keyword가 포함된 경우를
     # 모두 포함(or-> Q objects)하는 쿼리셋을 'songs'에 할당
@@ -52,29 +55,56 @@ def song_serarch(request):
 
     # POST요청에 전달된 INPUT요소 중, name이 'keyword'인 input 값
     # 공백문자 삭제 .strip()
-
+    context = {
+        'song_infos': [],
+    }
     keyword = request.GET.get('keyword')
 
-    if keyword:
-        songs_from_artists = Song.objects.filter(album__artists__name__contains=keyword)
-        songs_from_albums = Song.objects.filter(album__title__contains=keyword)
-        songs_from_title = Song.objects.filter(title__contains=keyword)
+    # named tuple
+    # 이름만 지정함
+    # SongInfo = namedtuple('SongInfo', ['type', 'q'])
 
-        context['songs_from_artists'] = songs_from_artists
-        context['songs_from_albums'] = songs_from_albums
-        context['songs_from_title'] = songs_from_title
+    # TYPE 까지 지정
+    class SongInfo(NamedTuple):
+        type: str
+        q: Q
+
+    if keyword:
+        song_infos = (
+            SongInfo(
+                type='아티스트명',
+                q=Q(album__artists__name__contains=keyword)),
+            SongInfo(
+                type='앨범명',
+                q=Q(album__title__contains=keyword)),
+            SongInfo(
+                type='노래제목',
+                q=Q(title__contains=keyword)),
+        )
+
+        for type, q in song_infos:
+            context['song_infos'].append({
+                'type': type,
+                'songs': Song.objects.filter(q),
+            })
+
+        # #  zip을 사용하기
+        # for type, songs in zip(
+        #         ('아티스트명', '앨범', '노래제목'),
+        #         (songs_from_artists, songs_from_albums, songs_from_title)):
+        #     context['songs_infos'].append({'type': type, 'songs': songs})
 
         # Song목록 중 title이 keyword 를 포함하는 쿼리셋
         # 빈값이 들어왔을 때는 all이 들어간거랑 마찬가지
-    #     songs = Song.objects.filter(
-    #     Q(album__title__contains=keyword) |
-    #     Q(album__artists__name__contains=keyword) |
-    #     Q(title__contains=keyword)
-    # ).distinct()
-    # 미리 선언한  context의 'songs'키에  QuerySet을 할당
-    # context['songs'] = songs
+        #     songs = Song.objects.filter(
+        #     Q(album__title__contains=keyword) |
+        #     Q(album__artists__name__contains=keyword) |
+        #     Q(title__contains=keyword)
+        # ).distinct()
+        # 미리 선언한  context의 'songs'키에  QuerySet을 할당
+        # context['songs'] = songs
 
-    # 만약 method가 post이면 context에 'songs' 가 채워진 상태,
-    # GET이면 빈 태로 render실행
+        # 만약 method가 post이면 context에 'songs' 가 채워진 상태,
+        # GET이면 빈 태로 render실행
 
     return render(request, 'song/song_search.html', context)
