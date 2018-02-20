@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="get">
+    <div class="form-group">
+        <label for="input_search"></label>
+        <input
+                type="text"
+                name="keyword"
+                id="input_search"
+        >
+    </div>
+    <input type="submit" value="검색">
+
+    <h2>아티스트 검색</h2>
+    <ul>
+        {% for song in songs_from_artists %}
+        <li>{{ song.title }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>앨범 검색</h2>
+    <ul>
+        {% for song in songs_from_albums %}
+        <li>{{ song.title }}</li>
+        {% endfor %}
+    </ul>
+
+
+    <h2>곡명 검색</h2>
+    <ul>
+        {% for song in songs_from_title %}
+        <li>{{ song.title }}</li>
+        {% endfor %}
+    </ul>
+
+</form>
+{% endblock %}
