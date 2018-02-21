@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 from artist.models import Artist
 
+def dynamic_ablum_cover_path(instance, filename):
+    return f'album/{instance.title}-{instance.album_id}/album_cover.png'
 
 class Album(models.Model):
     album_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
@@ -14,7 +16,7 @@ class Album(models.Model):
     )
     img_cover = models.ImageField(
         '커버 이미지',
-        upload_to='album',
+        upload_to=dynamic_ablum_cover_path,
         blank=True,
     )
     release_date = models.DateField('발매일', )
