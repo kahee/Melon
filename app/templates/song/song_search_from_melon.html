@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1><a href="{% url 'song:song-search-melon' %} ">Search Song</a></h1>
+
+<form action="" method="get">
+    <input type="text" name="keyword">
+    <input type="submit" value="검색">
+</form>
+
+{% for song in result %}
+<div class="song">
+    <p>{{ song.song_id }} / {{ song.title }}-{{ song.artist }}</p>
+    <form action="{% url 'song:song-add-from-melon' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="song_id" value="{{ song.song_id }}">
+        <button type="submit">Add to DB</button>
+    </form>
+</div>
+
+{% endfor %}
+
+{% endblock %}

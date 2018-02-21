@@ -1,11 +1,13 @@
-from collections import namedtuple
 from typing import NamedTuple
-
-from django.db.models import Q
 from django.shortcuts import render
+from django.db.models import Q
 
-# Create your views here.
 from song.models import Song
+
+__all__ = (
+    'song_list',
+    'song_search',
+)
 
 
 def song_list(request):
@@ -16,7 +18,7 @@ def song_list(request):
     return render(request, 'song/song_list.html', context)
 
 
-def song_serarch(request):
+def song_search(request):
     """
     사용할 url : song/search/
     사용할 템플릿 :templates/song/song_search.html
@@ -107,12 +109,3 @@ def song_serarch(request):
         # GET이면 빈 태로 render실행
 
     return render(request, 'song/song_search.html', context)
-
-
-
-def song_add_from_melon(request):
-    #  패키지 분할(artist랑 똑같은 형태로)
-    # artist_add_from_melon 같은 기능
-    # song_search_fromm_melon 도 구현
-    #  이 안에 DB 에 추가 하는  FROM  구현
-    pass

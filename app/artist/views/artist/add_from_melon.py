@@ -245,4 +245,4 @@ def artist_add_from_melon(request):
             }
         )
 
-        return redirect('artist:artist-list')
+    return redirect('artist:artist-list')

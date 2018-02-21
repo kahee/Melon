@@ -6,6 +6,7 @@ from artist.models import Artist
 
 class Album(models.Model):
     title = models.CharField('앨범명', max_length=100)
+
     artists = models.ManyToManyField(
         Artist,
         verbose_name='아티스트 목록'
