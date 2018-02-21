@@ -6,9 +6,10 @@ from django.db import models
 # pre_save때 이미지에 none으로 데이터베이스에 저장
 # post_save때 다시 원래 이미지를 넣어줌
 
-def dynamic_profile_img_path(instance,filename):
+def dynamic_profile_img_path(instance, filename):
     # pk로 받으면 instance가 저장이 안되서 pk가없다.
     return f'artist/{instance.name}-{instance.melon_id}/profile_img.png'
+
 
 class Artist(models.Model):
     BLOOD_TYPE_A = 'a'
@@ -34,7 +35,7 @@ class Artist(models.Model):
     constellation = models.CharField('별자리', max_length=30, blank=True, )
     blood_type = models.CharField('혈액형', max_length=1, choices=CHOICES_BLOOD_TYPE, blank=True)
     intro = models.TextField('소개', blank=True, )
-    melon_id = models.CharField('멜론 ArtistID', max_length=20, blank=True,null=True,unique=True, )
+    melon_id = models.CharField('멜론 ArtistID', max_length=20, blank=True, null=True, unique=True, )
 
     def __str__(self):
         return self.name
