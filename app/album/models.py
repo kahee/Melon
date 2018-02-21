@@ -5,6 +5,7 @@ from artist.models import Artist
 
 
 class Album(models.Model):
+    album_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
     title = models.CharField('앨범명', max_length=100)
 
     artists = models.ManyToManyField(

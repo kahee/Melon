@@ -1,6 +1,8 @@
+import re
 import requests
 
 from bs4 import BeautifulSoup, NavigableString
+
 
 def song_list_crawler(keyword):
     url = 'https://www.melon.com/search/song/index.htm'
@@ -68,10 +70,16 @@ def song_detail_crawler(song_id):
 
     genre = description_dict.get('장르')
 
-    result_dict = dict()
+    p = re.compile(r'javascript:melon.link.goAlbumDetail[(]\'(\d+)\'[)]')
 
+    first_dd = dl.find('dd')
+    album_id = p.search(str(first_dd)).group(1)
+
+    result_dict = dict()
     result_dict['title'] = title
     result_dict['genre'] = genre
     result_dict['lyrics'] = lyrics
+    result_dict['album_id'] = album_id
 
     return result_dict
+
