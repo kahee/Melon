@@ -2,8 +2,7 @@ from datetime import datetime
 import re
 import requests
 from bs4 import BeautifulSoup
-from django.core.files import File
-from django.http import HttpRequest, HttpResponse
+from django.core.files.base import ContentFile
 from django.shortcuts import redirect
 from io import BytesIO
 
@@ -31,7 +30,8 @@ def artist_add_from_melon(request):
 
     intro를 채운 artist를 생성 db에 저장
     :return:
-    # """
+
+     """
     if request.method == 'POST':
         artist_id = request.POST.get('artist_id')
 
@@ -77,27 +77,38 @@ def artist_add_from_melon(request):
         db_constellation = personal_list[4]
         db_blood_type = personal_list[5]
 
-        # # blood_type과 birth_date_str 이 없을 때 처리하기
-        # if db_birth_date:
-        #     db_blood_type = datetime.strptime(db_birth_date, '%Y.%m.%d')
-        #
-        # else:
-        #     db_birth_date = ''
-        #
-        # if not db_blood_type:
-        for short, full in Artist.CHOICES_BLOOD_TYPE:
-            if db_blood_type.strip() == full:
-                db_blood_type = short
-                break
+        # blood_type과 birth_date_str 이 없을 때 처리하기
+        if db_birth_date == '':
+            db_birth_date = None
+        else:
+            db_birth_date = datetime.strptime(db_birth_date, '%Y.%m.%d')
+
+        if not db_blood_type:
+            for short, full in Artist.CHOICES_BLOOD_TYPE:
+                if db_blood_type.strip() == full:
+                    db_blood_type = short
+                    break
+
             else:
                 db_blood_type = Artist.BLOOD_TYPE_X
 
-
+        # 이미지 넣는 코드부분
+        # 그림파일형태의 이미지 가져옴
         response = requests.get(url_img_cover)
         binary_data = response.content
-        temp_file = BytesIO()
-        temp_file.write(binary_data)
-        temp_file.seek(0)
+
+        # # BytesIO 파일처럼 취급하는 객체인데, 메모리상에서만
+        # # 아무런 내용이 없는 파일이 메모리에 생성
+        # temp_file = BytesIO()
+        # # 그 파일에 데이터를 입력
+        # temp_file.write(binary_data)
+        # # 파일 탐색 시점 처음으로
+        # # 어떠한 데이터가 입력된 파일 데이터
+        # # 임시 파일이기때문에 이름이 없다.
+        # temp_file.seek(0)
+
+        from pathlib import Path
+        file_name = Path(url_img_cover).name
 
         artist, _ = Artist.objects.update_or_create(
             melon_id=artist_id,
@@ -106,12 +117,10 @@ def artist_add_from_melon(request):
                 'real_name': db_real_name,
                 'nationality': db_nationality,
                 'constellation': db_constellation,
-                'birth_date': datetime.strptime(db_birth_date, '%Y.%m.%d'),
+                'birth_date': db_birth_date,
                 'blood_type': db_blood_type,
+                'img_profile': ContentFile(binary_data, name=file_name)
             }
         )
-        from pathlib import Path
-        file_name = Path(url_img_cover).name
-        artist.img_profile.save(file_name, File(temp_file))
 
         return redirect('artist:artist-list')
