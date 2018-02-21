@@ -12,3 +12,4 @@ def album_list(request):
     }
 
     return render(request, 'album/album_list.html', context)
+
