@@ -3,6 +3,11 @@ import requests
 
 from bs4 import BeautifulSoup, NavigableString
 
+__all__ = (
+    'song_list_crawler',
+    'song_detail_crawler',
+)
+
 
 def song_list_crawler(keyword):
     url = 'https://www.melon.com/search/song/index.htm'
@@ -17,7 +22,12 @@ def song_list_crawler(keyword):
     result = []
     for tr in tr_list:
         song_id = tr.select_one('td:nth-of-type(1) input[type=checkbox]').get('value')
-        title = tr.select_one('td:nth-of-type(3) a.fc_gray').get_text(strip=True)
+        if tr.select_one('td:nth-of-type(3) a.fc_gray'):
+            if tr.select_one('td:nth-of-type(3) a.fc_gray'):
+                title = tr.select_one('td:nth-of-type(3) a.fc_gray').get_text(strip=True)
+            else:
+                title = tr.select_one('td:nth-of-type(3) > div > div > span').get_text(strip=True)
+
         artist = tr.select_one('td:nth-of-type(4) span.checkEllipsisSongdefaultList').get_text(
             strip=True)
         album = tr.select_one('td:nth-of-type(5) a').get_text(strip=True)
@@ -43,7 +53,6 @@ def song_detail_crawler(song_id):
 
     div_entry = soup.find('div', class_='entry')
     title = div_entry.find('div', class_='song_name').strong.next_sibling.strip()
-    artist = div_entry.find('div', class_='artist').get_text(strip=True)
 
     # 앨범, 발매일, 장르...에 대한 Description list
     dl = div_entry.find('div', class_='meta').find('dl')
@@ -56,6 +65,7 @@ def song_detail_crawler(song_id):
 
     div_lyrics = soup.find('div', id='d_video_summary')
 
+    # 가사가 없는 경우 분기
     if div_lyrics:
         lyrics_list = []
         for item in div_lyrics:
@@ -71,15 +81,18 @@ def song_detail_crawler(song_id):
     genre = description_dict.get('장르')
 
     p = re.compile(r'javascript:melon.link.goAlbumDetail[(]\'(\d+)\'[)]')
-
     first_dd = dl.find('dd')
     album_id = p.search(str(first_dd)).group(1)
 
+    artist_href = div_entry.find('a', class_='artist_name').get('href')
+    p = re.compile(r'javascript:melon.link.goArtistDetail[(]\'(\d+)\'[)]')
+    artist_id = p.search(str(artist_href)).group(1)
     result_dict = dict()
     result_dict['title'] = title
     result_dict['genre'] = genre
     result_dict['lyrics'] = lyrics
     result_dict['album_id'] = album_id
+    result_dict['artist_id'] = artist_id
 
     return result_dict
 

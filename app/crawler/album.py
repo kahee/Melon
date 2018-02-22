@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from django.core.files.base import ContentFile
 
+__all__ = (
+    'album_detail_crawler',
+)
+
 
 def album_detail_crawler(album_id):
     url = "https://www.melon.com/album/detail.htm"
