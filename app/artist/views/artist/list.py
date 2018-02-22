@@ -15,4 +15,5 @@ def artist_list(request):
     context = {
         'artists': artists,
     }
+
     return render(request, 'artist/artist_list.html', context)
