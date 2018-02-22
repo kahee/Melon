@@ -67,7 +67,4 @@ def artist_detail_crawler(artist_id):
     artist_info['constellation'] = constellation
     artist_info['img_profile'] = img_profile
 
-    print(artist_info)
-
     return artist_info
-
