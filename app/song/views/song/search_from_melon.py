@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
-from crawler.song import song_list_crawler
+from crawler.song_data import song_list_crawler
 
 __all__ = [
     'song_search_from_melon',

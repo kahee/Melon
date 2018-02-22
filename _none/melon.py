@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_POST
 
 from album.models import Album
-from crawler.album import album_detail_crawler
-from crawler.song import song_list_crawler, song_detail_crawler
+from crawler.album_data import album_detail_crawler
+from crawler.song_data import song_list_crawler, song_detail_crawler
 from song.models import Song
 
 __all__ = [

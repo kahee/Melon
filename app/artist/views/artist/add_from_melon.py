@@ -1,17 +1,3 @@
-from datetime import datetime
-import re
-import requests
-from bs4 import BeautifulSoup
-from django.core.files.base import ContentFile
-from django.shortcuts import redirect
-from io import BytesIO
-
-from ...models import Artist
-
-__all__ = (
-    'artist_add_from_melon',
-)
-
 from django.shortcuts import redirect
 from ...models import Artist
 
@@ -41,6 +27,6 @@ def artist_add_from_melon(request):
      """
     if request.method == 'POST':
         artist_id = request.POST.get('artist_id')
-        artist, _ = Artist.objects.update_or_create_from_melon(artist_id)
+        artist, _ = Artist.objects.update_or_create_from_melon_id(artist_id)
 
     return redirect('artist:artist-list')

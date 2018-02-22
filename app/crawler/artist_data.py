@@ -1,12 +1,49 @@
-import re
 from datetime import datetime
+
+import re
 import requests
 from bs4 import BeautifulSoup
 from django.core.files.base import ContentFile
 
 __all__ = (
     'artist_detail_crawler',
+    'artist_list_crawler'
 )
+
+
+def artist_list_crawler(keyword):
+    if keyword:
+        url = 'https://www.melon.com/search/artist/index.htm'
+        params = {
+            'q': keyword,
+            'section': 'searchGnbYn'
+        }
+
+        response = requests.get(url, params)
+        soup = BeautifulSoup(response.text, 'lxml')
+        artist_info = soup.find_all('div', class_='wrap_atist12')
+        artist_info_list = []
+        for i in artist_info:
+            # 아티스트 이미지
+            artist_img = i.find('a', class_="thumb").find('img').get('src')
+            # 아티스트 고유번호
+            artist_id_href = i.find('a', class_="ellipsis").get('href')
+            artist_id = re.search(r"\('(\d+)'\);", artist_id_href).group(1)
+            # 아티스트 이름
+            artist = i.find('a', class_="ellipsis").text
+            # 아티스트 정보
+            info = i.find('dd', class_="gubun").get_text(strip=True)
+            # 아티스트 장르
+            genre = i.find('dd', class_="gnr").get_text(strip=True)[4:]
+            artist_info_list.append({
+                'artist_id': artist_id,
+                'artist': artist,
+                'info': info,
+                'genre': genre,
+                'img': artist_img,
+            })
+
+        return artist_info_list
 
 
 def artist_detail_crawler(artist_id):
@@ -51,13 +88,11 @@ def artist_detail_crawler(artist_id):
     # 그림파일형태의 이미지 가져옴
     response = requests.get(url_img_cover)
     binary_data = response.content
-
     from pathlib import Path
     file_name = Path(url_img_cover).name
     img_profile = ContentFile(binary_data, name=file_name)
 
-    artist_info = {}
-
+    artist_info = dict()
     artist_info[' artist_id'] = artist_id
     artist_info['name'] = name
     artist_info['real_name'] = real_name
