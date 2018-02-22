@@ -14,13 +14,16 @@ class SongManager(models.Manager):
         """
         result = song_detail_crawler(song_id)
         artist_id = result.get('artist_id')
-        artist, _ = Artist.objects.update_or_create_from_melon_id(artist_id)
+        album_id = result.get('album_id')
+        album, _ = Album.objects.update_or_creaet_from_album_id(album_id)
+        artist, _ = Artist.objects.update_or_create_from_melon(artist_id)
         song, song_created = Song.objects.update_or_create(
             song_id=song_id,
             defaults={
                 'title': result.get('title'),
                 'genre': result.get('genre'),
                 'lyrics': result.get('lyrics'),
+                'album': album,
             }
         )
         # 생성된  Song의 artists의 필드를 추가

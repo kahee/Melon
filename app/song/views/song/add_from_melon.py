@@ -13,17 +13,15 @@ def song_add_from_melon(request):
         song_id = request.POST.get('song_id')
         song, _ = Song.objects.update_or_create_from_melon_id(song_id)
 
+        # 0. AlbumManager  만들기
+        # 1. album 모델에 update_or_create_from_album_id ()
+        # 2. song _update_or_create_form_melon_id 에 추가하기
+
+
         # album_detail 정보 db에 저장
-        # album_id = result.get('album_id')
-        # album_info = album_detail_crawler(album_id)
-        #
-        # album, created = Album.objects.get_or_create(
-        #     album_id=album_id,
-        #     defaults={
-        #         'img_cover': album_info.get('album_cover'),
-        #         'release_date': datetime.strptime(album_info.get("rel_date"), '%Y.%m.%d'),
-        #         'title': album_info.get("album_title"),
-        #     }
-        # )
+
+
+
+
 
     return redirect('song:song-list')
