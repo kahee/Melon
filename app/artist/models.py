@@ -50,7 +50,11 @@ class ArtistManager(models.Manager):
             artist_id=artist_id,
             exe=get_buffer_ext(temp_file),
         )
-
+        # ModelManager 로 utils 함수를 만드는 편이 낫다.
+        # 파일 중복 저장
+        if artist.img_profile:
+            # 이전에 이미지 파일이 있으면 이전 파일을 삭제 후, 새로 저장
+            artist.img_profile.delete()
         artist.img_profile.save(file_name, File(temp_file))
 
         return artist, artist_created
