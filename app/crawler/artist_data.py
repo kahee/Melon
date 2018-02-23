@@ -3,7 +3,9 @@ from datetime import datetime
 import re
 import requests
 from bs4 import BeautifulSoup
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
+
+from utils.file import download
 
 __all__ = (
     'artist_detail_crawler',
@@ -84,13 +86,6 @@ def artist_detail_crawler(artist_id):
     else:
         birth_date = datetime.strptime(birth_date, '%Y.%m.%d')
 
-    # 이미지 넣는 코드부분
-    # 그림파일형태의 이미지 가져옴
-    response = requests.get(url_img_cover)
-    binary_data = response.content
-    from pathlib import Path
-    file_name = Path(url_img_cover).name
-    img_profile = ContentFile(binary_data, name=file_name)
 
     artist_info = dict()
     artist_info[' artist_id'] = artist_id
@@ -100,6 +95,6 @@ def artist_detail_crawler(artist_id):
     artist_info['nationality'] = nationality
     artist_info['blood_type'] = blood_type
     artist_info['constellation'] = constellation
-    artist_info['img_profile'] = img_profile
+    artist_info['img_profile'] = url_img_cover
 
     return artist_info

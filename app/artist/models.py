@@ -1,3 +1,4 @@
+from django.core.files import File
 from django.db import models
 
 # instance 저장되는 객체 ,  filename은 저장 이름
@@ -5,6 +6,7 @@ from django.db import models
 # pre_save때 이미지에 none으로 데이터베이스에 저장
 # post_save때 다시 원래 이미지를 넣어줌
 from crawler.artist_data import artist_detail_crawler
+from utils.file import download, get_buffer_ext
 
 
 def dynamic_profile_img_path(instance, filename):
@@ -40,9 +42,16 @@ class ArtistManager(models.Manager):
                 'constellation': artist_info['constellation'],
                 'birth_date': birth_date,
                 'blood_type': blood_type,
-                'img_profile': artist_info.get('img_profile'),
             }
         )
+
+        temp_file = download(artist_info['img_profile'])
+        file_name = '{artist_id}.{exe}'.format(
+            artist_id=artist_id,
+            exe=get_buffer_ext(temp_file),
+        )
+        artist.img_profile.save(file_name, File(temp_file))
+
         return artist, artist_created
 
 
@@ -63,7 +72,7 @@ class Artist(models.Model):
 
     # Pillow 이미지 저장하기 위해 사용하는 것
     melon_id = models.CharField('멜론 ArtistID', max_length=20, blank=True, null=True, unique=True, )
-    img_profile = models.ImageField('프로필 이미지', upload_to=dynamic_profile_img_path, blank=True)
+    img_profile = models.ImageField('프로필 이미지', upload_to='artist', blank=True)
     name = models.CharField('이름', max_length=50, )
     real_name = models.CharField('본명', max_length=30, blank=True, )
     nationality = models.CharField('국적', max_length=50, blank=True, )

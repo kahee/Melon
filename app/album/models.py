@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from django.core.files import File
 from django.db import models
 
 # Create your models here.
-from artist.models import Artist
 from crawler import album_detail_crawler
+from utils.file import download, get_buffer_ext
 
 
 def dynamic_ablum_cover_path(instance, filename):
@@ -14,14 +15,24 @@ def dynamic_ablum_cover_path(instance, filename):
 class AlbumManager(models.Manager):
     def update_or_creaet_from_album_id(self, album_id):
         album_info = album_detail_crawler(album_id)
+
+        # 이미지 파일로 만드는 것
+        # 객체가져오기만 하는
+        # 예외처리경우, 앨범이미지가 없는 경우도 있다.
+        temp_file = download(album_info['album_cover'])
+        file_name = '{album_id}.{exe}'.format(
+            album_id=album_id,
+            exe=get_buffer_ext(temp_file),
+        )
+
         album, album_created = Album.objects.get_or_create(
             album_id=album_id,
             defaults={
-                'img_cover': album_info.get('album_cover'),
                 'release_date': datetime.strptime(album_info.get("rel_date"), '%Y.%m.%d'),
                 'title': album_info.get("album_title"),
             }
         )
+        album.img_cover.save(file_name, File(temp_file))
 
         return album, album_created
 
@@ -32,7 +43,7 @@ class Album(models.Model):
 
     img_cover = models.ImageField(
         '커버 이미지',
-        upload_to=dynamic_ablum_cover_path,
+        upload_to='album',
         blank=True,
     )
     release_date = models.DateField('발매일', )
