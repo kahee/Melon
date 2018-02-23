@@ -45,7 +45,7 @@ def signup_view(request):
     # username이 중복되는지 검사, 존재하지 않으면 유저 생성후 index로 이동
     # 이외의 경우, 다시 회원가입화면으로
     context = {
-        'error' : list()
+        'error': list()
     }
 
     if request.method == 'POST':
@@ -56,20 +56,8 @@ def signup_view(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            password2 = form.cleaned_data['password2']
-            if_valid = True
-
-            if User.objects.filter(username=username).exists():
-                form.add_error('username','이미 사용되고 있는 아이디입니다.')
-                is_valid=False
-            if password != password2:
-                form.add_error('password2','비밀번호가 비밀번호 확인란과 같지 않습니다.')
-                is_valid=False
-            if is_valid:
-                User.objects.create_user(username=username,password=password)
-                return redirect('index')
-
-
+            User.objects.create_user(username=username, password=password)
+            return redirect('index')
 
     else:
         # form 빈 폼
