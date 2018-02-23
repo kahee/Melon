@@ -17,7 +17,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR = os.path.join(BASE_DIR,'static')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 # User-upload
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
@@ -95,8 +95,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fc-melon',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'USER': 'kahee',
+        'PASSWORD': 'rkgml'
     }
 }
 

@@ -50,6 +50,7 @@ class ArtistManager(models.Manager):
             artist_id=artist_id,
             exe=get_buffer_ext(temp_file),
         )
+
         artist.img_profile.save(file_name, File(temp_file))
 
         return artist, artist_created
