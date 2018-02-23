@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render, redirect
 
 # user모델 클래스가져올때는 꼭 이렇게 할 것
+from members.forms import SignupForm
+
 User = get_user_model()
 
 # Create your views here.
@@ -42,26 +44,37 @@ def signup_view(request):
     # username, password , password2가 전달되었다는 가정
     # username이 중복되는지 검사, 존재하지 않으면 유저 생성후 index로 이동
     # 이외의 경우, 다시 회원가입화면으로
-
     context = {
-        'errors': []
+        'error' : list()
     }
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        password2 = request.POST['password2']
+        # form 자체에 데이터가 들어감
+        form = SignupForm(request.POST)
 
-        is_valid = True
-        if User.objects.filter(username=username).exists():
-            context['errors'].append('Username already exists')
-            is_valid = False
-        if password != password2:
-            context['errors'].append('Password and Password2 is not equal')
-            is_valid = False
+        # 유효성 검사가 잘된 경우엔 입력된 데이터를 cleaned_data에서 사용가능
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            password2 = form.cleaned_data['password2']
+            if_valid = True
 
-        if is_valid:
-            User.objects.create(username=username, password=password)
-            return render(request, 'index.html')
+            if User.objects.filter(username=username).exists():
+                form.add_error('username','이미 사용되고 있는 아이디입니다.')
+                is_valid=False
+            if password != password2:
+                form.add_error('password2','비밀번호가 비밀번호 확인란과 같지 않습니다.')
+                is_valid=False
+            if is_valid:
+                User.objects.create_user(username=username,password=password)
+                return redirect('index')
+
+
+
+    else:
+        # form 빈 폼
+        form = SignupForm()
+
+    context['signup_form'] = form
 
     return render(request, 'members/signup.html', context)
