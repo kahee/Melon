@@ -38,9 +38,9 @@ SECRET_KEY = '1eb@0nvbq4wlmn7c04k!e()z&pa&o%209$8w%^r&9b&cwe4i2r'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'members.User'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,8 +53,11 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'artist',
-    'song',
     'album',
+    'members',
+    'song',
+
+
 
 ]
 
@@ -96,7 +99,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fc-melon',
+        'NAME': 'fc-melon1',
         'HOST': 'localhost',
         'PORT': '5432',
         'USER': 'kahee',
@@ -106,6 +109,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
