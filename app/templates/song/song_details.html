@@ -3,16 +3,20 @@
 
 <div class="songs-list-container">
     <ul class="clearfix">
-        {% for song in songs %}
         <li class="clearfix">
-            <a href="{% url 'song:song-detail' song.pk %}">
+            <a href="">
                 <input type="hidden" value="{{ song.song_id }}">
+
                 <div class="song-info">
-                    <div class="name"> {{ song.title }}(가수명)/{{ song.genre }}</div>
+                    <div class="name"> {{ song.title }}</div>
+                    <div>{{song.artists}}</div>
+                    <div>{{ song.genre }}</div>
+                    <div>{{ song.album }}</div>
+                    <div>{{ song.lyrics }}</div>
                 </div>
             </a>
         </li>
-        {% endfor %}
+
     </ul>
 </div>
 {% endblock %}
