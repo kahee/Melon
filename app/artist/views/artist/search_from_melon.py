@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from crawler.artist_data import artist_list_crawler
 
 __all__ = (

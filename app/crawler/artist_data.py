@@ -1,19 +1,19 @@
 from datetime import datetime
-
 import re
 import requests
 from bs4 import BeautifulSoup
-from django.core.files.base import ContentFile, File
-
-from utils.file import download
 
 __all__ = (
     'artist_detail_crawler',
-    'artist_list_crawler'
+    'artist_list_crawler',
 )
 
 
 def artist_list_crawler(keyword):
+    # artist_data 와 artist.models 에서 둘다 사용되기 때문에
+    # 이 경우, 함수가 실행될때만 import  되게끔
+    from artist.models import Artist
+
     if keyword:
         url = 'https://www.melon.com/search/artist/index.htm'
         params = {
@@ -43,6 +43,7 @@ def artist_list_crawler(keyword):
                 'info': info,
                 'genre': genre,
                 'img': artist_img,
+                'is_exist': Artist.objects.filter(melon_id=artist_id).exists(),
             })
 
         return artist_info_list
@@ -85,7 +86,6 @@ def artist_detail_crawler(artist_id):
         birth_date = None
     else:
         birth_date = datetime.strptime(birth_date, '%Y.%m.%d')
-
 
     artist_info = dict()
     artist_info[' artist_id'] = artist_id

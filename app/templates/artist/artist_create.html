@@ -1,74 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {% for field in artist_form %}
     <div class="form-group">
-        <label for="name">이름</label>
-        <input
-                type="text"
-                name="name"
-                id="name"
-        >
-        <br>
-
-        <label for="real_name">본명</label>
-        <input
-                type="text"
-                name="real_name"
-                id="real_name"
-        >
-        <br>
-
-        <label for="nationality">국적</label>
-        <input
-                type="text"
-                name="nationality"
-                id="nationality"
-        >
-        <br>
-
-        <label for="birth_date">생년월일</label>
-        <input
-                type="text"
-                name="birth_date"
-                id="birth_date"
-        >
-
-        <br>
-
-        <label for="constellation">별자리</label>
-        <input
-                type="text"
-                name="constellation"
-                id="constellation"
-        >
-
-        <br>
-        <label for="blood_type">혈액형</label>
-        <input
-                type="text"
-                name="blood_type"
-                id="blood_type"
-        >
-        <br>
-        
-        <label for="intro">소개</label>
-        <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
-        <br>
-
-        <button type="submit" value="제출">제출</button>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <ul>
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
+    {% endfor %}
+        <button type="submit" value="제출">제출</button>
+
 </form>
 
 
 <form action="{% url 'artist:artist-search-melon' %}" method="get">
 
  <h3><a href="{% url 'artist:artist-search-melon' %}">멜론에서 아티스트 검색</a></h3>
-    <form action="" method="get">
-        <input type="text" name="keyword" placeholder="아티스트" value="keyword">
+        <input type="text" name="keyword" placeholder="아티스트">
         <button type="submit">검색</button>
-    </form>
+
 </form>
 
 {% endblock %}

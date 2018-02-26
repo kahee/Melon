@@ -15,7 +15,7 @@
 <div class="header-wrap">
     <header class="main-header">
         <div class="search-container">
-            <a href="{% url 'index' %}">
+            <a href="">
                 <img src="{% static 'images/logo.png' %}" alt="">
             </a>
             <div class="input-container">
@@ -30,10 +30,10 @@
             </ul>
         </nav>
 
-        <nav class="main-header-nav-right clearfix">
+        <nav class="main-header-nav nav-right clearfix">
             <ul class="clearfix">
                 {% if user.is_authenticated %}
-                <li><a href=""></a>내정보</li>
+                <li><a href="">내정보({{ request.user.username}})</a></li>
                 <li><a href="{% url 'logout' %}">로그아웃</a></li>
                 {% else %}
                 <li><a href="{% url 'login' %}">로그인</a></li>
@@ -41,6 +41,7 @@
                 {% endif %}
             </ul>
         </nav>
+
     </header>
 </div>
 

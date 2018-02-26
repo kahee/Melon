@@ -16,7 +16,11 @@
                 <input type='hidden' name="artist_id" value="{{ artist_info.artist_id}}">
                 <img src="{{ artist_info.img }}" alt="">
                 <span>{{ artist_info.artist_id }}{{ artist_info.artist }}</span>
+                {% if artist_info.is_exist %}
+                <button type="submit">DB에 업데이트</button>
+                {% else %}
                 <button type="submit">DB에 추가하기</button>
+                {% endif %}
             </form>
         </li>
         {% endfor %}
