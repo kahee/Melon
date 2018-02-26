@@ -52,7 +52,8 @@ def signup_view(request):
         # form 자체에 데이터가 들어감
         form = SignupForm(request.POST)
 
-        # 유효성 검사가 잘된 경우엔 입력된 데이터를 cleaned_data에서 사용가능
+        # 커스텀 메소드랑 연결되는 부분 공부할 것
+        # 유효성 검사가 패스된 경우 입력된 데이터를 cleaned_data에서 사용가능
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -62,6 +63,9 @@ def signup_view(request):
     else:
         # form 빈 폼
         form = SignupForm()
+
+    # {% extends parents %}
+    # context[parents] = get.tamplates()
 
     context['signup_form'] = form
 

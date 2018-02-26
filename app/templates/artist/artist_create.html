@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <form action="" method="post">
     {% csrf_token %}
     <div class="form-group">
@@ -59,8 +58,17 @@
         <br>
 
         <button type="submit" value="제출">제출</button>
-
     </div>
+</form>
+
+
+<form action="{% url 'artist:artist-search-melon' %}" method="get">
+
+ <h3><a href="{% url 'artist:artist-search-melon' %}">멜론에서 아티스트 검색</a></h3>
+    <form action="" method="get">
+        <input type="text" name="keyword" placeholder="아티스트" value="keyword">
+        <button type="submit">검색</button>
+    </form>
 </form>
 
 {% endblock %}

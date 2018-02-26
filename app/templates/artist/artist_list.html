@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div>
+	<button type="submit"><a href="{% url 'artist:artist-add' %}">아티스트 추가하기</a></button>
+</div>
 <div class="artist-list-container">
 	<ul class="clearfix">
 		{% for artist in artists %}

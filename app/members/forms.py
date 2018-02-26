@@ -10,8 +10,9 @@ User = get_user_model()
 
 class SignupForm(forms.Form):
     username = forms.CharField(
+        help_text='100 characters max.',
         label="아이디",
-        # required=  경우 빈칸을 submit할 수 있음
+        # required= false 경우 빈칸을 submit할 수 있음
     )
     # widget은 CharField를 사용한다 했을 때 좀더 상세한 조건 넣어주기 위해
     password = forms.CharField(

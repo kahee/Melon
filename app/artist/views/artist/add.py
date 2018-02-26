@@ -34,6 +34,6 @@ def artist_create(request):
         return redirect('artist:artist-list')
 
     elif request.method == 'GET':
-        pass
+       pass
 
     return render(request, 'artist/artist_create.html', context)
