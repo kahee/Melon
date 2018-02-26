@@ -1,7 +1,6 @@
 import datetime
 from django.shortcuts import redirect, render
-
-from artist.forms import ArtistForm
+from ...forms import ArtistForm
 
 
 

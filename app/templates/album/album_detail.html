@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="artist-list-container">
     <ul class="clearfix">
-        {% for album in albums %}
         <li class="clearfix">
-            <a href="{% url 'album:album-detail' album.pk %}">
-                <input type="hidden" value="{{ album.album_id  }}">
+            <a href="">
                 <img src="{% if album.img_cover %}{{ album.img_cover.url }}{% endif %}" alt="" class="cover">
                 <div class="album-info">
                     <div class="name">{{ album.title }}</div>
@@ -15,7 +12,7 @@
                 </div>
             </a>
         </li>
-        {% endfor %}
     </ul>
 </div>
+
 {% endblock %}

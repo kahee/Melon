@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.core.files import File
 from django.db import models
 
@@ -51,6 +52,13 @@ class Album(models.Model):
 
     album_intro = models.TextField('앨범소개', blank=True)
 
+    # 앨범을 좋아요 누른 사람
+    like_user = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='like_album',
+        blank=True,
+    )
+
     @property
     def genre(self):
         # sql distinct사용하는게 속도가 더 빠르다.
@@ -66,3 +74,32 @@ class Album(models.Model):
         # )
 
     objects = AlbumManager()
+
+
+class AlbumLike(models.Model):
+    album = models.ForeignKey(
+        Album,
+        related_name='like_user_info_list',
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='like_album_info_list',
+        on_delete=models.CASCADE,
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        unique_together = (
+            ('album', 'user'),
+        )
+
+    def __str__(self):
+        return 'AlbumLike (User:{user}, Album:{album}, Created:{created})'.format(
+            album=self.album,
+            user=self.user,
+            created=datetime.strftime(self.created_date,'%Y.%m.%d'),
+
+        )
