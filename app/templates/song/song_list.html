@@ -1,10 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
-    {% for song in songs %}
+div class="artist-list-container">
+    <ul class="clearfix">
+        {% for song in songs %}
+        <li class="clearfix">
+            <a href="{% url 'artist:artist-detail' artist.pk %}">
+                <input type="hidden" value="{{ artist.melon_id  }}">
+                <img src="{% if artist.img_profile %}{{ artist.img_profile.url }}{% endif %}" alt="" class="cover">
+                <div class="artist-info">
+                    <div class="name">{{ artist.name }}</div>
+                    <div>{{ artist.nationality }}</div>
+                    <div>{{ artist.birth_date }}</div>
+                    <div>{{ artist.constellation }}</div>
+                    <div>{{ artist.blood_type }}</div>
+                </div>
 
-    <li>{{ song.title }}</li>
-
-    {% endfor %}
-</ul>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

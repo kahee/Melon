@@ -1,15 +1,11 @@
 from datetime import datetime
-
 from django.conf import settings
 from django.core.files import File
 from django.db import models
-
-# Create your models here.
 from crawler import album_detail_crawler
 from utils.file import download, get_buffer_ext
 
-
-def dynamic_ablum_cover_path(instance, filename):
+def dynamic_album_cover_path(instance, filename):
     return f'album/{instance.title}-{instance.album_id}/album_cover.png'
 
 
@@ -53,7 +49,7 @@ class Album(models.Model):
     album_intro = models.TextField('앨범소개', blank=True)
 
     # 앨범을 좋아요 누른 사람
-    like_user = models.ManyToManyField(
+    like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='like_album',
         blank=True,
@@ -72,6 +68,17 @@ class Album(models.Model):
         #     title=self.title,
         #     artists=artists,
         # )
+
+    def toggle_like_user(self, user):
+        """
+        like_user에 주어진 user가 자신의 like_user에 없으면 like_user에 추가
+        :param user:
+        :return:
+        """
+        like, like_created = self.like_user_info_list.get_or_create(user=user)
+        if not like_created:
+            like.delete()
+        return like_created
 
     objects = AlbumManager()
 
@@ -100,6 +107,6 @@ class AlbumLike(models.Model):
         return 'AlbumLike (User:{user}, Album:{album}, Created:{created})'.format(
             album=self.album,
             user=self.user,
-            created=datetime.strftime(self.created_date,'%Y.%m.%d'),
+            created=datetime.strftime(self.created_date, '%Y.%m.%d'),
 
         )

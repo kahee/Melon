@@ -13,6 +13,18 @@
                     <div>{{ album.release_date }}</div>
                     <div>{{ album.album_intro}}</div>
                 </div>
+
+                {% if user.is_authenticated %}
+                <form action="{% url 'album:album-like' album.pk %}" method="post">
+                    {% csrf_token %}
+                    {% if request.user in album.like_users.all %}
+                    <button type="submit"> 좋아요 취소</button>
+                    {% else %}
+                    <button type="submit"> 좋아요 </button>
+                    {% endif %}
+                </form>
+                {% else %}
+                {% endif %}
             </a>
         </li>
         {% endfor %}

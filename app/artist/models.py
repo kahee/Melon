@@ -11,9 +11,6 @@ from django.db import models
 from crawler.artist_data import artist_detail_crawler
 from utils.file import download, get_buffer_ext
 
-__all__ = (
-    'artist_like_toggle',
-)
 
 def dynamic_profile_img_path(instance, filename):
     # pk로 받으면 instance가 저장이 안되서 pk가없다.
