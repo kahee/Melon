@@ -1,3 +1,6 @@
+from datetime import timezone, datetime
+
+from django.conf import settings
 from django.core.files import File
 from django.db import models
 
@@ -86,7 +89,63 @@ class Artist(models.Model):
     blood_type = models.CharField('혈액형', max_length=1, choices=CHOICES_BLOOD_TYPE, blank=True)
     intro = models.TextField('소개', blank=True, )
 
+    # 노래에 좋아요를 누른 유저
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="ArtistLike",
+        related_name='like_artists',
+        blank=True,
+    )
+
     def __str__(self):
         return self.name
 
+    def toggle_like_user(self, user):
+        """
+        주어진 like_user에 주어진 user가 자신의 like_user에 없으면
+         like_users 에 추가한다
+
+        이미 있는 경우
+        :param user:
+        :return:
+        """
+        # 자신이 'artist' 이미 user가 주어진 user인 ArtistLike를 가져오거나 없으면 생성
+        like, like_created = self.like_user_info_list.get_or_create(user=user)
+        # 만약 이미 있었을 경우(새로 생성되지 않았을 경우)
+        if not like_created:
+            # like를 지워줌
+            like.delete()
+        # 생성 여부를 알려줌
+        return like_created
+
     objects = ArtistManager()
+
+
+class ArtistLike(models.Model):
+    # Artist와 User(members.User)와의 관계를 나타내주는
+    artist = models.ForeignKey(
+        Artist,
+        related_name='like_user_info_list',
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='like_artist_info_list',
+        on_delete=models.CASCADE,
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        # 같은 유저가 같은 아티스트 좋아요 누르는게 중복 되지 않게
+        unique_together = (
+            ('artist', 'user'),
+        )
+
+    def __str__(self):
+        return 'ArtistLike (User:{user}, Artist:{artist}, Created:{created})'.format(
+            artist=self.artist,
+            user=self.user.username,
+            created=datetime.strftime(self.created_date, '%Y.%m.%d'),
+        )

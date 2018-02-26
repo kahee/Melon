@@ -8,4 +8,8 @@ class User(AbstractUser):
     # 모든 apllication들의 migrations폴더내의 Migration파일 전부 삭제
     # makemigrations -> migrate
     # 데이터베이스에 usr 생성됬는지 확인
-    pass
+    def toggle_like_artist(self, artist):
+        like, like_created = self.like_artist_info_list.get_or_create(artist=artist)
+        if not like_created:
+            like.delete()
+        return like_created
