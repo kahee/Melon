@@ -14,6 +14,19 @@
                     <div>{{ song.album }}</div>
                     <div>{{ song.lyrics }}</div>
                 </div>
+                {% if user.is_authenticated %}
+                <form action="{% url 'song:song-like' song.pk %}" method="post">
+                    {% csrf_token %}
+                    <!--get_full_path 는 자기자신의 주소로 줌-->
+                    <input type="hidden" name ="next-path" value="{{ request.get_full_path }}">
+                    {% if request.user in song.like_users.all %}
+                    <button type="submit"> 좋아요 취소</button>
+                    {% else %}
+                    <button type="submit"> 좋아요</button>
+                    {% endif %}
+                </form>
+                {% else %}
+                {% endif %}
             </a>
         </li>
 

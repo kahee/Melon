@@ -3,6 +3,7 @@ import requests
 
 from bs4 import BeautifulSoup, NavigableString
 
+
 __all__ = (
     'song_list_crawler',
     'song_detail_crawler',
@@ -10,6 +11,7 @@ __all__ = (
 
 
 def song_list_crawler(keyword):
+    from song.models import Song
     url = 'https://www.melon.com/search/song/index.htm'
     params = {
         'q': keyword,
@@ -37,6 +39,7 @@ def song_list_crawler(keyword):
              'title': title,
              'artist': artist,
              'album': album,
+             'is_exist': Song.objects.filter(song_id=song_id).exists(),
              }
         )
 
@@ -95,4 +98,3 @@ def song_detail_crawler(song_id):
     result_dict['artist_id'] = artist_id
 
     return result_dict
-

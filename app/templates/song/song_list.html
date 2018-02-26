@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div>
+    <button type="submit"><a href="{% url 'song:song-search-melon' %}">곡 검색하기</a></button>
+</div>
 <div class="songs-list-container">
     <ul class="clearfix">
         {% for song in songs %}
@@ -10,6 +12,17 @@
                 <div class="song-info">
                     <div class="name"> {{ song.title }}(가수명)/{{ song.genre }}</div>
                 </div>
+                {% if user.is_authenticated %}
+                <form action="{% url 'song:song-like' song.pk %}" method="post">
+                    {% csrf_token %}
+                    {% if request.user in song.like_users.all %}
+                    <button type="submit"> 좋아요 취소</button>
+                    {% else %}
+                    <button type="submit"> 좋아요</button>
+                    {% endif %}
+                </form>
+                {% else %}
+                {% endif %}
             </a>
         </li>
         {% endfor %}

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.db import models
 from album.models import Album
 from artist.models import Artist
@@ -58,6 +61,22 @@ class Song(models.Model):
 
     lyrics = models.TextField('가사', blank=True, )
 
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="SongLike",
+        related_name='like_song',
+        blank=True,
+    )
+
+    def toggle_like_user(self, user):
+        like, like_created = self.like_user_info_list.get_or_create(user=user)
+        # 만약 이미 있었을 경우(새로 생성되지 않았을 경우)
+        if not like_created:
+            # like를 지워줌
+            like.delete()
+        # 생성 여부를 알려줌
+        return like_created
+
     @property
     def release_date(self):
         return self.album.release_date
@@ -79,3 +98,32 @@ class Song(models.Model):
         return self.title
 
     objects = SongManager()
+
+
+class SongLike(models.Model):
+    song = models.ForeignKey(
+        Song,
+        related_name='like_user_info_list',
+        on_delete=models.CASCADE,
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='like_song_info_list',
+        on_delete=models.CASCADE,
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        unique_together = (
+            ('song', 'user'),
+        )
+
+    def __str__(self):
+        return 'SongLike (User:{user}, Song:{song}, Created:{created})'.format(
+            artist=self.song,
+            user=self.user.username,
+            created=datetime.strftime(self.created_date, '%Y.%m.%d'),
+        )
