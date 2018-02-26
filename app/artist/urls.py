@@ -8,4 +8,5 @@ urlpatterns = [
     path('add/', views.artist_create, name='artist-add'),
     path('search/melon/', views.artist_search_from_melon, name='artist-search-melon'),
     path('search/melon/add', views.artist_add_from_melon, name='artist-add-from-melon'),
+    path('<int:artist_pk>/edit/', views.artist_edit, name='artist-edit'),
 ]

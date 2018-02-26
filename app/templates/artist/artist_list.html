@@ -2,24 +2,25 @@
 
 {% block content %}
 <div>
-	<button type="submit"><a href="{% url 'artist:artist-add' %}">아티스트 추가하기</a></button>
+    <button type="submit"><a href="{% url 'artist:artist-add' %}">아티스트 추가하기</a></button>
 </div>
 <div class="artist-list-container">
-	<ul class="clearfix">
-		{% for artist in artists %}
-		<li class="clearfix">
-			<a href="">
-				<img src="{% if artist.img_profile %}{{ artist.img_profile.url }}{% endif %}" alt="" class="cover">
-				<div class="artist-info">
-					<div class="name">{{ artist.name }}</div>
-					<div>{{ artist.nationality }}</div>
-					<div>{{ artist.birth_date }}</div>
-					<div>{{ artist.constellation }}</div>
-					<div>{{ artist.blood_type }}</div>
-				</div>
-			</a>
-		</li>
-		{% endfor %}
-	</ul>
+    <ul class="clearfix">
+        {% for artist in artists %}
+        <li class="clearfix">
+            <a href="">
+                <input type="hidden" value="{{ artist.melon_id  }}">
+                <img src="{% if artist.img_profile %}{{ artist.img_profile.url }}{% endif %}" alt="" class="cover">
+                <div class="artist-info">
+                    <div class="name">{{ artist.name }}</div>
+                    <div>{{ artist.nationality }}</div>
+                    <div>{{ artist.birth_date }}</div>
+                    <div>{{ artist.constellation }}</div>
+                    <div>{{ artist.blood_type }}</div>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
