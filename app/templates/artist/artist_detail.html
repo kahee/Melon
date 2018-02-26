@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    <button type="submit"><a href="{% url 'artist:artist-add' %}">아티스트 추가하기</a></button>
-</div>
 <div class="artist-list-container">
     <ul class="clearfix">
-        {% for artist in artists %}
         <li class="clearfix">
             <a href="{% url 'artist:artist-detail' artist.pk %}">
                 <input type="hidden" value="{{ artist.melon_id  }}">
@@ -21,7 +17,8 @@
                 {% if user.is_authenticated %}
                 <form action="{% url 'artist:artist-like' artist.pk %}" method="post">
                     {% csrf_token %}
-
+                    <!--get_full_path 는 자기자신의 주소로 줌-->
+                    <input type="hidden" name ="next-path" value="{{ request.get_full_path }}">
                     {% if request.user in artist.like_users.all %}
                     <button type="submit"> 좋아요 취소</button>
                     {% else %}
@@ -31,9 +28,7 @@
                 {% else %}
                 {% endif %}
             </a>
-
         </li>
-        {% endfor %}
     </ul>
 </div>
 {% endblock %}
