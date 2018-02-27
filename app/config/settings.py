@@ -47,7 +47,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'members.backends.FacebookBackend'
 ]
-YOUV = 'AIzaSyA9P_iHObWwmfhSapF3Oa598isUXAVaGF0'
 
 # Application definition
 INSTALLED_APPS = [

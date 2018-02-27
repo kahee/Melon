@@ -31,6 +31,7 @@ urlpatterns = [
     path('artist/', include('artist.urls')),
     path('album/', include('album.urls')),
     path('song/', include('song.urls')),
+    path('video/', include('video.urls')),
     path('facebook-login/', facebook_login, name='facebook-login')
 
 ]
