@@ -1,4 +1,4 @@
-.artist-list-container {
+.album-list-container {
   ul {
     li {
       float: left;
@@ -20,13 +20,11 @@
         border: 1px solid #ddd;
       }
 
-
       button {
         margin-left: 10px;
       }
 
-
-      .artist-info {
+      .album-info {
         float: left;
         padding: 5px 0 0 15px;
 
@@ -36,8 +34,6 @@
           margin-bottom: 4px;
         }
       }
-
-
     }
   }
 }

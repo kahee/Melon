@@ -19,7 +19,7 @@
                     <div>{{ artist.blood_type }}</div>
                 </div>
                 {% if user.is_authenticated %}
-                <form action="{% url 'artist:artist-like' artist.pk %}" method="post">
+                <form action="{% url 'artist:artist-like' artist.pk %}" method="post" class="button_class">
                     {% csrf_token %}
                     {% if request.user in artist.like_users.all %}
                     <button type="submit"> 좋아요 취소</button>

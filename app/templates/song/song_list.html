@@ -11,7 +11,7 @@
                 <input type="hidden" value="{{ song.song_id }}">
                 <div class="song-info">
                     <div class="name"> {{ song.title }}(가수명)/{{ song.genre }}</div>
-                </div>
+
                 {% if user.is_authenticated %}
                 <form action="{% url 'song:song-like' song.pk %}" method="post">
                     {% csrf_token %}
@@ -23,6 +23,7 @@
                 </form>
                 {% else %}
                 {% endif %}
+              </div>
             </a>
         </li>
         {% endfor %}

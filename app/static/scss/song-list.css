@@ -1,0 +1,12 @@
+.songs-list-container {
+  margin-top: 10px; }
+  .songs-list-container a {
+    display: inline-block;
+    color: #333; }
+  .songs-list-container div.name {
+    display: inline-block; }
+  .songs-list-container form {
+    margin-left: 10px;
+    display: inline-block; }
+
+/*# sourceMappingURL=song-list.css.map */
