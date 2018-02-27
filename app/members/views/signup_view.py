@@ -8,7 +8,7 @@ from members.models import User
 
 
 __all__ = (
-    'signup_view'
+    'signup_view',
 )
 
 def signup_view(request):

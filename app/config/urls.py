@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from config import views
-from members.views import login_view, logout_view, signup_view
+from members.views import login_view, logout_view, signup_view, facebook_login
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -31,6 +31,7 @@ urlpatterns = [
     path('artist/', include('artist.urls')),
     path('album/', include('album.urls')),
     path('song/', include('song.urls')),
+    path('facebook-login/', facebook_login, name='facebook-login')
 
 ]
 
