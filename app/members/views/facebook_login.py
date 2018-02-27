@@ -1,5 +1,5 @@
 import requests
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login, get_user_model, authenticate
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
@@ -13,6 +13,14 @@ __all__ = (
 
 
 def facebook_login(request):
+    code = request.GET.get('code')
+    #  우리가 만든 함수를 사용함
+    user = authenticate(request, code=code)
+    login(request, user)
+    return redirect('index')
+
+
+def facebook_login_backup(request):
     # code로부터 AccessToken 가져오기
     client_id = settings.FACEBOOK_APP_ID
     client_secret = settings.FACEBOOK_SECRET_CODE

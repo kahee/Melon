@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class User(AbstractUser):
@@ -8,6 +9,11 @@ class User(AbstractUser):
     # 모든 apllication들의 migrations폴더내의 Migration파일 전부 삭제
     # makemigrations -> migrate
     # 데이터베이스에 usr 생성됬는지 확인
+    img_profile = models.ImageField(
+        upload_to='user',
+        blank=True,
+    )
+
     def toggle_like_artist(self, artist):
         like, like_created = self.like_artist_info_list.get_or_create(artist=artist)
         if not like_created:
