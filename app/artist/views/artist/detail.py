@@ -26,28 +26,31 @@ def artist_detail(request, artist_pk):
     response = requests.get(url, params)
     response_dict = response.json()
 
-    result = list()
+    video_lists = list()
 
     for item in response_dict['items']:
         video_id = item['id']['videoId']
         title = item['snippet']['title']
         img_url = item['snippet']['thumbnails']['medium']['url']
+        video_url = 'https://www.youtube.com/watch?v=DgT4CPv_CCE' + video_id
+        # Video.objects.update_or_create(
+        #     video_id=video_id,
+        #     title=title,
+        #     img_url=img_url,
+        # )
 
-        Video.objects.update_or_create(
-            video_id=video_id,
-            title=title,
-            img_url=img_url,
-        )
-
-        result.append({
+        video_lists.append({
             'video_id': video_id,
             'title': title,
             'img_url': img_url,
             'name': artist.name,
+            'href': video_url,
         })
 
     context = {
         'artist': artist,
+        'video_lists': video_lists,
+
     }
 
     return render(request, 'artist/artist_detail.html', context)
