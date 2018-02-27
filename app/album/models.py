@@ -51,6 +51,7 @@ class Album(models.Model):
     # 앨범을 좋아요 누른 사람
     like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
+        through="AlbumLike",
         related_name='like_album',
         blank=True,
     )
