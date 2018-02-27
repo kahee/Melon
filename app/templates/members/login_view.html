@@ -2,10 +2,15 @@
 {% block content %}
 
 <form action="{%url 'login' %} " method="post">
+    <h3>아이디로 로그인</h3>
     {% csrf_token %}
-    <input type="text" name="username"  placeholder="username">
-    <input type="password" name="password"  placeholder="password">
+    <input type="text" name="username" placeholder="username">
+    <input type="password" name="password" placeholder="password">
     <input type="submit" value="로그인">
 </form>
+
+<a href="https://www.facebook.com/v2.12/dialog/oauth?client_id=349633268867980&redirect_uri=http://localhost:8000/facebook-login/">페이스북으로 로그인
+</a>
+
 
 {% endblock %}
