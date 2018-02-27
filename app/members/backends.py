@@ -1,6 +1,9 @@
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files import File
+
+from utils.file import download, get_buffer_ext
 
 User = get_user_model()
 
@@ -57,29 +60,31 @@ class FacebookBackend:
             response_dict = response.json()
             return response_dict
 
+        # try:
+        access_token = get_access_token(code)
+        user_info = get_user_info(access_token)
+
+        facebook_id = user_info['id']
+        name = user_info['name']
+        first_name = user_info['first_name']
+        last_name = user_info['last_name']
+        url_picture = user_info['picture']['data']['url']
+
         try:
-            access_token = get_access_token(code)
-            user_info = get_user_info(access_token)
-
-            facebook_id = user_info['id']
-            name = user_info['name']
-            first_name = user_info['first_name']
-            last_name = user_info['last_name']
-            url_picture = user_info['picture']['data']['url']
-
-
-            try:
-                user = User.objects.get(username=facebook_id)
-            except User.DoesNotExist:
-                user = User.objects.create_user(
-                    username=facebook_id,
-                    first_name=first_name,
-                    last_name=last_name,
-                    img_profile=url_picture,
-                )
-            return user
-        except Exception:
-            return None
+            user = User.objects.get(username=facebook_id)
+        except User.DoesNotExist:
+            user = User.objects.create_user(
+                username=facebook_id,
+                first_name=first_name,
+                last_name=last_name,
+            )
+        if not user.img_profile:
+            temp_file = download(url_picture)
+            ext = get_buffer_ext(temp_file)
+            user.img_profile.save(f'{user.pk}.{ext}', File(temp_file))
+        return user
+        # except Exception:
+        #     return None
 
     def get_user(self, user_id):
         try:

@@ -40,12 +40,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'members.User'
 
+YOUTUBE_API_KEY = 'AIzaSyA9P_iHObWwmfhSapF3Oa598isUXAVaGF0'
 FACEBOOK_APP_ID = '349633268867980'
 FACEBOOK_SECRET_CODE = 'd0004deb91a2a18dfe98b94b8a0cff44'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'members.backends.FacebookBackend'
 ]
+YOUV = 'AIzaSyA9P_iHObWwmfhSapF3Oa598isUXAVaGF0'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
     'album',
     'members',
     'song',
+    'video'
 
 ]
 
