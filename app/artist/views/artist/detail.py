@@ -32,19 +32,20 @@ def artist_detail(request, artist_pk):
         video_id = item['id']['videoId']
         title = item['snippet']['title']
         img_url = item['snippet']['thumbnails']['medium']['url']
-        video_url = 'https://www.youtube.com/watch?v=DgT4CPv_CCE' + video_id
-        # Video.objects.update_or_create(
-        #     video_id=video_id,
-        #     title=title,
-        #     img_url=img_url,
-        # )
+
+        video_url = 'https://www.youtube.com/watch'
+        params = {
+            'v': video_id,
+        }
+
+        href = requests.get(video_url, params).url
 
         video_lists.append({
             'video_id': video_id,
             'title': title,
             'img_url': img_url,
             'name': artist.name,
-            'href': video_url,
+            'href': href,
         })
 
     context = {

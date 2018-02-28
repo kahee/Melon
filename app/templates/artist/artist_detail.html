@@ -32,14 +32,27 @@
 
     <div class="video-list-container">
         <ul class="clearfix">
+            {% for list in video_lists %}
             <li class="clearfix">
-                {% for list in video_lists %}
                 <a href='{{ list.href }}'>
                     <img src="{% if list.img_url %}{{ list.img_url }}{% endif %}" alt="" class="cover">
                     <div>{{ list.title }}</div>
-                    {% endfor %}
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'video:video-add' artist.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="next-path" value="{{ request.get_full_path }}">
+                        <!--get_full_path 는 자기자신의 주소로 줌-->
+                        {% if list.is_exist%}
+                        <button type="submit"> 좋아요 취소</button>
+                        {% else %}
+                        <button type="submit"> DB 저장</button>
+                        {% endif %}
+                    </form>
+                    {% else %}
+                    {% endif %}
                 </a>
             </li>
+            {% endfor %}
         </ul>
     </div>
 </div>

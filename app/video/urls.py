@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'video'
 urlpatterns = [
-      path('', views.video_list, name='video-list'),
+      path('<int:artist_pk>/add/', views.video_add, name='video-add'),
 ]
