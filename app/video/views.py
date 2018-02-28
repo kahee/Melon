@@ -16,7 +16,7 @@ def video_add(request, artist_pk):
     """
     if request.method == 'POST':
         artist = Artist.objects.get(pk=artist_pk)
-
+1
         key = YOUTUBE_API_KEY
         url = 'https://www.googleapis.com/youtube/v3/search'
         params = {

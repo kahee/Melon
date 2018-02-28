@@ -38,8 +38,9 @@
                     <img src="{% if list.img_url %}{{ list.img_url }}{% endif %}" alt="" class="cover">
                     <div>{{ list.title }}</div>
                     {% if user.is_authenticated %}
-                    <form action="{% url 'video:video-add' artist.pk %}" method="post">
+                    <form action="{% url 'video:video-add' artist.pk  %}" method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="video" value ="{{ video_id }}">
                         <input type="hidden" name="next-path" value="{{ request.get_full_path }}">
                         <!--get_full_path 는 자기자신의 주소로 줌-->
                         {% if list.is_exist%}
