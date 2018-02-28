@@ -5,7 +5,7 @@
     <button type="submit"><a href="{% url 'artist:artist-add' %}">아티스트 추가하기</a></button>
 </div>
 <div class="artist-list-container">
-    <ul class="clearfix">
+	<ul class="artist-list clearfix">
         {% for artist in artists %}
         <li class="clearfix">
             <a href="{% url 'artist:artist-detail' artist.pk %}">

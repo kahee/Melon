@@ -1,5 +1,5 @@
 .artist-list-container {
-  ul {
+  ul.artist-list {
     li {
       float: left;
       width: 50%;
@@ -12,20 +12,12 @@
         display: inline-block;
         color: #333;
       }
-
       img.cover {
         float: left;
         width: 120px;
         height: 120px;
         border: 1px solid #ddd;
       }
-
-
-      button {
-        margin-left: 10px;
-      }
-
-
       .artist-info {
         float: left;
         padding: 5px 0 0 15px;
@@ -36,8 +28,6 @@
           margin-bottom: 4px;
         }
       }
-
-
     }
   }
 }

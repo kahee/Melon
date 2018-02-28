@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="artist-list-container">
-    <ul class="clearfix">
+
+    <ul class="artist-list clearfix">
         <li class="clearfix">
             <a href="">
                 <img src="{% if artist.img_profile %}{{ artist.img_profile.url }}{% endif %}" alt="" class="cover">
@@ -29,32 +30,37 @@
             </a>
         </li>
     </ul>
+    <h3>저장된 YouTube영상</h3>
+    <ul class="youtube-search-list">
+        {% for video in artist.youtube_videos.all %}
+        <li>
+            <a href="http://youtu.be/{{ video.youtube_id }}" target="_blank">
+                <img src="{{ video.url_thumbnail }}" alt="">
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 
-    <div class="video-list-container">
-        <ul class="clearfix">
-            {% for list in video_lists %}
-            <li class="clearfix">
-                <a href='{{ list.href }}'>
-                    <img src="{% if list.img_url %}{{ list.img_url }}{% endif %}" alt="" class="cover">
-                    <div>{{ list.title }}</div>
-                    {% if user.is_authenticated %}
-                    <form action="{% url 'video:video-add' artist.pk  %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="video" value ="{{ video_id }}">
-                        <input type="hidden" name="next-path" value="{{ request.get_full_path }}">
-                        <!--get_full_path 는 자기자신의 주소로 줌-->
-                        {% if list.is_exist%}
-                        <button type="submit"> 좋아요 취소</button>
-                        {% else %}
-                        <button type="submit"> DB 저장</button>
-                        {% endif %}
-                    </form>
-                    {% else %}
-                    {% endif %}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <h3>관련 YouTube영상</h3>
+    <ul class="youtube-search-list">
+        {% for item in youtube_items %}
+        <li>
+            <a href="https://youtu.be/{{ item.id.videoId }}" target="_blank">
+                <img src="{{ item.snippet.thumbnails.medium.url }}" alt="">
+            </a>
+            <div>{{ item.snippet.title }}</div>
+            {% if user.is_authenticated %}
+            <form action="{% url 'artist:artist-add-youtube' artist_pk=artist.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="youtube_id" value="{{ item.id.videoId }}">
+                <input type="hidden" name="title" value="{{ item.snippet.title }}">
+                <input type="hidden" name="next-path" value="{{ request.get_full_path }}">
+                <input type="hidden" name="url_thumbnail" value="{{ item.snippet.thumbnails.medium.url }}">
+                <button type="submit">DB저장</button>
+            </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

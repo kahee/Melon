@@ -5,3 +5,4 @@ from .add_from_melon import *
 from .edit import *
 from .like import *
 from .detail import *
+from .add_youtube import *

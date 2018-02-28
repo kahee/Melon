@@ -21,37 +21,17 @@ def artist_detail(request, artist_pk):
     params = {
         'key': key,
         'part': 'snippet',
+        'type': 'video',
+        'maxResult': '10',
         'q': artist.name,
     }
+
     response = requests.get(url, params)
     response_dict = response.json()
 
-    video_lists = list()
-
-    for item in response_dict['items']:
-        video_id = item['id']['videoId']
-        title = item['snippet']['title']
-        img_url = item['snippet']['thumbnails']['medium']['url']
-
-        video_url = 'https://www.youtube.com/watch'
-        params = {
-            'v': video_id,
-        }
-
-        href = requests.get(video_url, params).url
-
-        video_lists.append({
-            'video_id': video_id,
-            'title': title,
-            'img_url': img_url,
-            'name': artist.name,
-            'href': href,
-        })
-
     context = {
         'artist': artist,
-        'video_lists': video_lists,
-
+        'youtube_items': response_dict['items'],
     }
 
     return render(request, 'artist/artist_detail.html', context)
