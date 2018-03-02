@@ -1,5 +1,6 @@
 # Custom
 .media
+.config_secrets
 
 reated by https://www.gitignore.io/api/linux,macos,django,python,pycharm+all
 

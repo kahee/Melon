@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
+import json
 import os
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
@@ -18,6 +19,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+CONFIG_SECRETS = os.path.join(ROOT_DIR, '.config_secrets')
+CONFIG_SETTINGS = os.path.join(CONFIG_SECRETS, "config_settings.json")
+
+json_data = open(CONFIG_SETTINGS, "rb").read()
+
+config_settings = json.loads(json_data)
+print(config_settings)
 
 # User-upload
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
@@ -48,6 +56,15 @@ AUTHENTICATION_BACKENDS = [
     'members.backends.FacebookBackend'
 ]
 
+# email send
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = config_settings['email']['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = config_settings['email']['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -62,9 +79,11 @@ INSTALLED_APPS = [
 
     'artist',
     'album',
+    'email_send',
     'members',
+    'sms',
     'song',
-    'video'
+    'video',
 
 ]
 
