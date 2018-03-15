@@ -38,7 +38,7 @@ urlpatterns = [
     path('song/', include('song.urls')),
     path('video/', include('video.urls')),
 
-    path('api/artist', include('artist.urls.apis'))
+    path('api/artist/', include('artist.urls.apis'))
 
 ]
 

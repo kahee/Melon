@@ -1,4 +1,6 @@
-from django.http import JsonResponse
+import json
+
+from django.http import JsonResponse, HttpResponse
 from artist.models import Artist
 
 __all__ = (
@@ -7,12 +9,40 @@ __all__ = (
 
 
 def artist_list(request):
+    """
+    data: {
+        'artists':{
+        {
+            'melon_id':.....
+            'name':...
+        }
+    }
+    :param request:
+    :return:
+    """
+
     # localhost:8000/api/artist/
     artists = Artist.objects.all()
+    artist_data_list = []
+
+    # for artist in artists:
+    #     artist_data = {
+    #         'melon_id': artist.melon_id,
+    #         'name': artist.name
+    #     }
+    #     artist_data_list.append(artist_data)
+
     data = {
-        'artists': artists
+        'artists':
+            [
+                {
+                    'melon_id': artist.melon_id, 'name': artist.name
+                }
+                for artist in artists],
     }
+
     return JsonResponse(data)
+    # return HttpResponse(json.dumps(data), content_type='application/json')
 
 # /artist/          -> artist.urls.views
 # /api/artists/     -> artist.urls.apis
