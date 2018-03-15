@@ -31,12 +31,14 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('facebook-login/', facebook_login, name='facebook-login'),
 
-    path('artist/', include('artist.urls')),
+    path('artist/', include('artist.urls.views')),
     path('album/', include('album.urls')),
     path('email/', include('email_send.urls')),
     path('sms/', include('sms.urls')),
     path('song/', include('song.urls')),
     path('video/', include('video.urls')),
+
+    path('api/artist', include('artist.urls.apis'))
 
 ]
 

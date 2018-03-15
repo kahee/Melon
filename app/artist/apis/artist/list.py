@@ -1,6 +1,10 @@
 from django.http import JsonResponse
 from artist.models import Artist
 
+__all__ = (
+    'artist_list',
+)
+
 
 def artist_list(request):
     # localhost:8000/api/artist/

@@ -4,7 +4,7 @@ from .. import views
 
 app_name = 'artist'
 urlpatterns = [
-    path('', views.artist_list, name='artist-list.py'),
+    path('', views.artist_list, name='artist-list'),
     path('<int:artist_pk>/', views.artist_detail, name='artist-detail'),
     path('add/', views.artist_create, name='artist-add'),
     path('search/melon/', views.artist_search_from_melon, name='artist-search-melon'),
