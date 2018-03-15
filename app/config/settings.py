@@ -15,7 +15,9 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -125,11 +127,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fc-melon1',
+        'NAME': 'fc_melon1',
         'HOST': 'localhost',
         'PORT': '5432',
         'USER': 'kahee',
-        'PASSWORD': 'rkgml'
+        'PASSWORD': 'rkgml12345'
     }
 }
 

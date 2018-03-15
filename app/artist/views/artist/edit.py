@@ -28,7 +28,7 @@ def artist_edit(request, artist_pk):
         form = ArtistForm(request.POST, request.FILES, instance=artist)
         if form.is_valid():
             form.save()
-            return redirect('artist:artist-list')
+            return redirect('artist:artist-list.py')
 
     else:
 

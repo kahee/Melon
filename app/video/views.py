@@ -27,7 +27,7 @@ def video_add(request, artist_pk):
 #         response = requests.get(url, params)
 #         response_dict = response.json()
 #
-#         video_lists = list()
+#         video_lists = list.py()
 #
 #         for item in response_dict['items']:
 #             video_id = item['id']['videoId']

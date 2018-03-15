@@ -57,7 +57,7 @@ def song_detail_crawler(song_id):
     div_entry = soup.find('div', class_='entry')
     title = div_entry.find('div', class_='song_name').strong.next_sibling.strip()
 
-    # 앨범, 발매일, 장르...에 대한 Description list
+    # 앨범, 발매일, 장르...에 대한 Description list.py
     dl = div_entry.find('div', class_='meta').find('dl')
 
     # isinstance(인스턴스, 클래스(타입))

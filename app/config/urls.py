@@ -23,17 +23,20 @@ from config import views
 from members.views import login_view, logout_view, signup_view, facebook_login
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+
     path('', views.index, name='index'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('signup/', signup_view, name='signup'),
-    path('admin/', admin.site.urls),
+    path('facebook-login/', facebook_login, name='facebook-login'),
+
     path('artist/', include('artist.urls')),
     path('album/', include('album.urls')),
+    path('email/', include('email_send.urls')),
+    path('sms/', include('sms.urls')),
     path('song/', include('song.urls')),
     path('video/', include('video.urls')),
-    path('sms/', include('sms.urls')),
-    path('facebook-login/', facebook_login, name='facebook-login')
 
 ]
 

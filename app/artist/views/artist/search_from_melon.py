@@ -15,7 +15,7 @@ def artist_search_from_melon(request):
     2. 크롤링 된 검색결과를 적절히 파싱해서 검색 결과 목록을 생성
          -> list내에  dict들을 만드는 형태
     3. 해당 결과 목록을 템플릿에 출력
-        -> list 내에 dict 들을 만드는 형태
+        -> list.py 내에 dict 들을 만드는 형태
         artist_info_list = [
         {'name':'아이유', 'url_img_cover': 'http..'
     :param request:

@@ -16,7 +16,7 @@ def artist_create(request):
         form = ArtistForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('artist:artist-list')
+            return redirect('artist:artist-list.py')
 
     else:
         form = ArtistForm()
