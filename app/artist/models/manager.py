@@ -10,6 +10,21 @@ __all__ = (
 )
 
 class ArtistManager(models.Manager):
+    def to_json(self):
+    # 기존 쿼리셋 self.get_queryset()
+    # 특정 쿼리셋의 데이터 리스트를 dict의 list형태로 반환하도록 함
+    # Artists.objects.all().to_dict()
+    # [
+    #     {
+    #         'pk':<artist:pk>,
+    #         'name':<artist:name>,
+    #         'img_profile':<artist:img_profile>,
+    #     }
+    # ]
+    pass
+
+
+
 
     def update_or_create_from_melon(self, artist_id):
         from .artist import Artist

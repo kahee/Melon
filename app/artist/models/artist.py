@@ -6,8 +6,6 @@ from .artist_youtube import ArtistYouTube
 # 이경우 init에서 ArtistYouTube 를 만들기 전에 불러서 오류
 from .manager import ArtistManager
 
-
-
 __all__ = (
     'Artist',
 )
@@ -76,3 +74,11 @@ class Artist(models.Model):
         # 생성 여부를 알려줌
         return like_created
 
+    def to_json(self):
+        artist = {
+            'melon_id': self.melon_id,
+            'name': self.name,
+            'img_profile': self.img_profile.url if self.img_profile else None
+        }
+
+        return artist
