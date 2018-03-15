@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import json
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 
@@ -67,6 +66,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000',
+)
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -76,7 +81,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 추가 기능
+    # django-cors-header
+    'corsheaders',
     'django_extensions',
 
     'artist',
@@ -90,6 +96,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # django-cors-header
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -97,6 +106,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'

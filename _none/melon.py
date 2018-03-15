@@ -59,4 +59,4 @@ def song_add_from_melon(request):
         }
     )
 
-    return redirect('song:song-list.py')
+    return redirect('song:song-list')

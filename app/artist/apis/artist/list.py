@@ -36,7 +36,7 @@ def artist_list(request):
         'artists':
             [
                 {
-                    'melon_id': artist.melon_id, 'name': artist.name
+                    'melon_id': artist.melon_id, 'name': artist.name, 'img_profile': artist.img_profile,
                 }
                 for artist in artists],
     }

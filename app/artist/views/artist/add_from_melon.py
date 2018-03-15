@@ -29,4 +29,4 @@ def artist_add_from_melon(request):
         artist_id = request.POST.get('artist_id')
         artist, _ = Artist.objects.update_or_create_from_melon(artist_id)
 
-    return redirect('artist:artist-list.py')
+    return redirect('artist:artist-list')
