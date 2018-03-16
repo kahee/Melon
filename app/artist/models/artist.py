@@ -1,10 +1,15 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.fields.files import FieldFile
+from django.forms import model_to_dict
 
 from .artist_youtube import ArtistYouTube
 # from artist.models import ArtistYouTube
 # 이경우 init에서 ArtistYouTube 를 만들기 전에 불러서 오류
 from .manager import ArtistManager
+
+user_class = get_user_model()
 
 __all__ = (
     'Artist',
@@ -75,10 +80,26 @@ class Artist(models.Model):
         return like_created
 
     def to_json(self):
-        artist = {
-            'melon_id': self.melon_id,
-            'name': self.name,
-            'img_profile': self.img_profile.url if self.img_profile else None
-        }
 
-        return artist
+        ret = model_to_dict(self)
+
+        def convert_value(value):
+            if isinstance(value, FieldFile):
+                return value.url if value else None
+            elif isinstance(value, user_class):
+                return value.pk
+            elif isinstance(value, ArtistYouTube):
+                return value.pk
+            return value
+
+        def convert_obj(obj):
+            if isinstance(obj,list):
+                for index, item in enumerate(obj):
+                    obj[index] = convert_obj(item)
+            elif isinstance(obj,dict):
+                for key, value in obj.items():
+                    obj[key] = convert_obj(value)
+            return convert_value(obj)
+
+        convert_obj(ret)
+        return ret

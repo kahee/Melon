@@ -4,29 +4,34 @@ from django.db import models
 from crawler import artist_detail_crawler
 from utils.file import download, get_buffer_ext
 
-
 __all__ = (
     'ArtistManager',
 )
 
+
 class ArtistManager(models.Manager):
-    def to_json(self):
-    # 기존 쿼리셋 self.get_queryset()
-    # 특정 쿼리셋의 데이터 리스트를 dict의 list형태로 반환하도록 함
-    # Artists.objects.all().to_dict()
-    # [
-    #     {
-    #         'pk':<artist:pk>,
-    #         'name':<artist:name>,
-    #         'img_profile':<artist:img_profile>,
-    #     }
-    # ]
-    pass
-
-
-
+    # def to_json(self):
+    #     return = []
+    #
+    #     for instance in self.get_queryset():
+    #         result.appen
+    #
+    #     artist_list = [artist for artist in self.values('pk', 'melon_id', 'name', 'img_profile',)]
+    #
+    #     # Artists.objects.to_dict()
+    #     # [
+    #     #     {
+    #     #         'pk':<artist:pk>,
+    #     #         'name':<artist:name>,
+    #     #         'img_profile':<artist:img_profile>,
+    #     #     }
+    #     # ]
+    #     return artist_list
 
     def update_or_create_from_melon(self, artist_id):
+
+        # 기존 쿼리셋 self.get_queryset()
+        # 특정 쿼리셋의 데이터 리스트를 dict의 list형태로 반환하
         from .artist import Artist
         artist_info = artist_detail_crawler(artist_id)
         birth_date = artist_info['birth_date']

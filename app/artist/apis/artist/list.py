@@ -22,8 +22,6 @@ def artist_list(request):
     """
 
     # localhost:8000/api/artist/
-    artists = Artist.objects.all()
-    artist_data_list = []
 
     # for artist in artists:
     #     artist_data = {
@@ -43,8 +41,10 @@ def artist_list(request):
     #             for artist in artists],
     # }
 
+    artists = Artist.objects.all()
+
     data = {
-        'artists': [artist.to_json() for artist in artists],
+        'artists': [artist.to_json() for artist in artists]
     }
 
     return JsonResponse(data)
