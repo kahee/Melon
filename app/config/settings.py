@@ -72,6 +72,13 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,6 +91,8 @@ INSTALLED_APPS = [
     # django-cors-header
     'corsheaders',
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     'artist',
     'album',

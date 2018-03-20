@@ -1,57 +1,23 @@
-import json
+from rest_framework import generics
+from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
 
-from django.http import JsonResponse, HttpResponse
-from artist.models import Artist
-
-__all__ = (
-    'artist_list',
-)
+from ...models import Artist
+from ...pagination import StandardResultsSetPagination
+from ...serializers import ArtistSerializer
 
 
-def artist_list(request):
-    """
-    data: {
-        'artists':{
-        {
-            'melon_id':.....
-            'name':...
-        }
-    }
-    :param request:
-    :return:
-    """
+class ArtistListView(generics.ListCreateAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
 
-    # localhost:8000/api/artist/
+    def get(self, request, *args, **kwargs):
+        print('request.user:', request.user)
+        return super().get(request, *args, **kwargs)
 
-    # for artist in artists:
-    #     artist_data = {
-    #         'melon_id': artist.melon_id,
-    #         'name': artist.name
-    #     }
-    #     artist_data_list.append(artist_data)
-    #
-    # data = {
-    #     'artists':
-    #         [
-    #             {
-    #                 'melon_id': artist.melon_id,
-    #                 'name': artist.name,
-    #                 'img_profile': artist.img_profile.url if artist.img_profile else None,
-    #             }
-    #             for artist in artists],
-    # }
 
-    artists = Artist.objects.all()
+class ArtistDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
 
-    data = {
-        'artists': [artist.to_json() for artist in artists]
-    }
-
-    return JsonResponse(data)
-    # return HttpResponse(json.dumps(data), content_type='application/json')
-
-# /artist/          -> artist.urls.views
-# /api/artists/     -> artist.urls.apis
-
-# /album/           -> album.urls.views
-# /api/album/       -> album.urls.apis
+    pagination_class = StandardResultsSetPagination
