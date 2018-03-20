@@ -16,27 +16,14 @@ Including another URLconf
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
+
 from django.urls import path, include
 
-from config import views
-from members.views import login_view, logout_view, signup_view, facebook_login
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    path('', views.index, name='index'),
-    path('', include('members.urls.views')),
-
-    path('artist/', include('artist.urls.views')),
-    path('album/', include('album.urls')),
-    path('email/', include('email_send.urls')),
-    path('sms/', include('sms.urls')),
-    path('song/', include('song.urls')),
-    path('video/', include('video.urls')),
-
-    path('api/artist/', include('artist.urls.apis')),
-    path('api/members/', include('members.urls.apis')),
+    path('', include('config.urls.views')),
+    path('api/', include('config.urls.apis')),
 
 ]
 
