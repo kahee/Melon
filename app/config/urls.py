@@ -26,10 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.index, name='index'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('signup/', signup_view, name='signup'),
-    path('facebook-login/', facebook_login, name='facebook-login'),
+    path('', include('members.urls.views')),
 
     path('artist/', include('artist.urls.views')),
     path('album/', include('album.urls')),
@@ -38,7 +35,8 @@ urlpatterns = [
     path('song/', include('song.urls')),
     path('video/', include('video.urls')),
 
-    path('api/artist/', include('artist.urls.apis'))
+    path('api/artist/', include('artist.urls.apis')),
+    path('api/members/', include('members.urls.apis')),
 
 ]
 
