@@ -20,5 +20,5 @@ def artist_like(request, artist_pk):
         artist = Artist.objects.get(pk=artist_pk)
         artist.toggle_like_user(request.user)
         # next-path가 있는지 없는지에 따라 redirect 페이지가 달라짐
-        next_path = request.POST.get('next-path', 'artist:artist-list.py')
-    return redirect(next_path)
+        next_path = request.POST.get('next-path', 'artist:artist-list')
+        return redirect(next_path)

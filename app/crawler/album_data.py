@@ -20,7 +20,7 @@ def album_detail_crawler(album_id):
 
     album_title = soup.find('div', class_="song_name").strong.next_sibling.strip()
     album_cover_url = soup.find('a', id='d_album_org').img.get('src')
-    meta = soup.find('dl', class_='list.py')
+    meta = soup.find('dl', class_='list')
     rel_date = meta.find('dd').get_text(strip=True)
 
     result_dic = dict()
