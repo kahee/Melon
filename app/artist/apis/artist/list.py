@@ -10,10 +10,11 @@ from ...serializers import ArtistSerializer
 class ArtistListView(generics.ListCreateAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
+    pagination_class = StandardResultsSetPagination
 
 
 class ArtistDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
 
-    pagination_class = StandardResultsSetPagination
+

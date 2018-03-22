@@ -5,5 +5,5 @@ from ..apis import ArtistListView, ArtistDetailView
 app_name = 'artist'
 urlpatterns = [
     path('', ArtistListView.as_view(), name='artist-list'),
-    path('<int:pk>/', ArtistDetailView.as_view(), name='artist-detail')
+    path('<int:pk>/', ArtistDetailView.as_view(), name='artist-detail'),
 ]
